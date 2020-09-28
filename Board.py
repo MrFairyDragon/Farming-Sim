@@ -11,7 +11,8 @@ class Board:
         self.main = main
         print(self.main)
 
+        # Makes a 2D array with the type as the Tile class
         self.grid = np.ndarray(shape=(SizeX, SizeY), dtype=Tile)
         for i in range(len(self.grid)):
             for j in range(len(self.grid[0])):
-                self.grid[i][j] = Tile(posX+i*70, posY+j*70, 'carrot', self.main)
+                self.grid[i][j] = Tile(posX + i * 70, posY + j * 70, 'carrot', self.main)
