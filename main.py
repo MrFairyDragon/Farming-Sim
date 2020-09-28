@@ -1,5 +1,6 @@
 import pygame
 from Board import Board
+from Chicken import Chicken
 import random
 
 
@@ -9,7 +10,7 @@ class main:
         pygame.init()
         mousePressed = False
 
-        coins = 0
+        self.coins = 0
         self.tilebuy = 1
         self.farmlandbuy = 20
 
@@ -29,7 +30,8 @@ class main:
         farmland = [Board(farmarray[0][0], farmarray[0][1], farmarray[0][2], farmarray[0][3], self),
                     Board(farmarray[1][0], farmarray[1][1], farmarray[1][2], farmarray[1][3], self),
                     Board(farmarray[2][0], farmarray[2][1], farmarray[2][2], farmarray[2][3], self)]
-
+        self.farmland = farmland
+        test = Chicken(self.screen, self)
         # Unlocks the first farmland and the first tile in the farmland
         for i in range(farmarray[0][2]):
             for j in range(farmarray[0][3]):
@@ -38,7 +40,7 @@ class main:
 
         # -------- Main Program Loop -----------
         while carryOn:
-            text = font.render(f'Coins: {coins}', True, (255, 255, 255), (0, 0, 0))
+            text = font.render(f'self.Coins: {self.coins}', True, (255, 255, 255), (0, 0, 0))
             textRect = text.get_rect()
             textRect.center = (50, 50)
 
@@ -63,8 +65,8 @@ class main:
                                         j * 70) + 64:
 
                                     # Tile is hard locked
-                                    if farmland[k].grid[i][j].isHardLocked and coins >= self.farmlandbuy:
-                                        coins -= self.farmlandbuy
+                                    if farmland[k].grid[i][j].isHardLocked and self.coins >= self.farmlandbuy:
+                                        self.coins -= self.farmlandbuy
                                         self.farmlandbuy += 10
 
                                         for w in range(farmarray[k][2]):
@@ -72,9 +74,9 @@ class main:
                                                 farmland[k].grid[w][q].isHardLocked = False
 
                                     # Tile is locked
-                                    elif farmland[k].grid[i][j].islocked and coins >= self.tilebuy \
+                                    elif farmland[k].grid[i][j].islocked and self.coins >= self.tilebuy \
                                             and not farmland[k].grid[i][j].isHardLocked:
-                                        coins -= self.tilebuy
+                                        self.coins -= self.tilebuy
                                         self.tilebuy += 1
                                         farmland[k].grid[i][j].islocked = False
 
@@ -82,7 +84,7 @@ class main:
                                     elif farmland[k].grid[i][j].isGrown:
                                         farmland[k].grid[i][j].animating = True
                                         farmland[k].grid[i][j].isGrown = False
-                                        coins += 1
+                                        self.coins += 1
 
                                     # Tile is watered
                                     elif not farmland[k].grid[i][j].isWatered:
@@ -131,12 +133,17 @@ class main:
 
             # Draws everything on the screen
             self.screen.fill([0, 0, 0])
+            skyImg = pygame.image.load('Sky_Skrr.png')
+            self.screen.blit(skyImg, (0, 0))
             self.screen.blit(text, textRect)
             for k in range(len(farmarray)):
                 for i in range(farmarray[k][2]):
                     for j in range(farmarray[k][3]):
                         farmland[k].grid[i][j].draw()
-
+            test.drawChicken(farmland[0].grid[test.gridPlacementX][test.gridPlacementY].defaultPosX,
+                             farmland[0].grid[test.gridPlacementX][test.gridPlacementY].defaultPosY)
+            test.chickenWalk()
+            test.eatGrass()
             pygame.display.flip()
 
             clock.tick(60)

@@ -17,6 +17,11 @@ class Tile:
         self.defaultPosX = posX
         self.defaultPosY = posY
 
+        self.grassImg = pygame.image.load('Grass/Grass01.png')
+        self.grassImg = pygame.transform.scale(self.grassImg, (64, 64))
+
+        self.carrotImg = pygame.image.load('Carrot.png')
+
         self.name = name  # This is here because why not
         self.main = main
         self.__degree = -360
@@ -61,7 +66,7 @@ class Tile:
 
         # Ready to be watered for the first time (Red)
         elif not self.isWatered and not self.isGrown and self.growTimer == self.time:
-            pygame.draw.rect(self.main.screen, [255, 0, 0], [self.__posX, self.__posY, self.__sizeX, self.__sizeY])
+            self.main.screen.blit(self.grassImg, (self.__posX, self.__posY))
 
         # Watered
         elif self.isWatered:
@@ -71,6 +76,7 @@ class Tile:
                                                              # Scales the growth timer from 0 and 2000
                                                              # to a number between 0 and 64
                                                              rescale(self.growTimer, 0, self.time, 0, self.__sizeY)])
+
         # Ready to be watered again after it failed the tick method (yellow and blue)
         else:
             pygame.draw.rect(self.main.screen, [255, 255, 0], [self.__posX, self.__posY, self.__sizeX, self.__sizeY])
