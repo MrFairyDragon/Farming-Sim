@@ -18,7 +18,6 @@ class main:
         farm2 = [size[0] / 2, size[1] / 10, 3, 7]
         farm3 = [size[0] / 10, size[1] / 2, 3, 3]
         farmarray = [farm, farm2, farm3]
-        print(self)
         farmland = [Board(farm[0], farm[1], farm[2], farm[3], self),
                     Board(farm2[0], farm2[1], farm2[2], farm2[3], self),
                     Board(farm3[0], farm3[1], farm3[2], farm3[3], self)]
