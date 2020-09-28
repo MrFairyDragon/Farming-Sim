@@ -87,7 +87,6 @@ class Tile:
 
     def shake(self, scale, speed):
         if self.isShaking:
-            print(self.__angle)
             if 0 <= self.__angle < 360:
                 self.__posX += math.sin(math.radians(self.__angle)) * scale
                 self.__posY += math.sin(math.radians(self.__angle)) * scale
