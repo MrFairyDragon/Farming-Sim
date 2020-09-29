@@ -9,13 +9,15 @@ def rescale(X, A, B, C, D):
 
 class Tile:
 
-    def __init__(self, posX, posY, name, main):
+    def __init__(self, posX, posY, gridX, gridY, name, main):
         self.__sizeX = 64
         self.__sizeY = 64
         self.__posX = posX
         self.__posY = posY
         self.defaultPosX = posX
         self.defaultPosY = posY
+        self.__gridX = gridX
+        self.__gridY = gridY
 
         self.grassImg = pygame.image.load('Grass/Grass01.png')
         self.grassImg = pygame.transform.scale(self.grassImg, (64, 64))
@@ -148,3 +150,6 @@ class Tile:
             else:
                 self.__angle = -720
                 self.shakeCount += 1
+
+    def getGridIndexes(self) -> []:
+        return [self.__gridX, self.__gridY]
