@@ -4,10 +4,11 @@ from Board import Board
 
 pygame.init()
 
-#farmland[k].grid[0][0].__posX
-#farmland[k].grid[0][0].__posY
+
+# farmland[k].grid[0][0].__posX
+# farmland[k].grid[0][0].__posY
 class Chicken:
-    def __init__(self,displayName: pygame.display, main):
+    def __init__(self, displayName: pygame.display, main):
         self.displayName = displayName
         self.main = main
 
@@ -15,44 +16,245 @@ class Chicken:
         self.image = pygame.image.load("Choiken.gif")
         self.bigImage = pygame.transform.scale(self.image, (55, 55))
 
-    stepCounter = 0
+    stepCounter: int = 0
 
-    gridPlacementX = 0
-    gridPlacementY = 0
+    gridPlacementX: int = 0
+    gridPlacementY: int = 0
 
-    def drawChicken(self, posX ,posY):
+    isTileCorrect: bool = False
+    whichTile: int
+
+    def drawChicken(self, posX, posY):
         self.displayName.blit(self.bigImage, (posX, posY))
 
     def chickenWalk(self):
         self.stepCounter += 1
+        print(self.stepCounter)
+        if self.stepCounter > 100:
+            if self.whichTile == 1:
+                if self.main.farmland[0].grid[1][0].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 0
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][0].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 0
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[0][1].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][1].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][1].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[0][2].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][2].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
+            elif self.whichTile == 2:
+                if self.main.farmland[0].grid[2][0].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 0
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[0][1].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][1].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][1].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[0][2].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][2].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
+            elif self.whichTile == 3:
+                if self.main.farmland[0].grid[0][1].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][1].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][1].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[0][2].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][2].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
+            elif self.whichTile == 4:
+                if self.main.farmland[0].grid[1][1].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][1].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[0][2].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][2].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
+            elif self.whichTile == 5:
+                if self.main.farmland[0].grid[2][1].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 1
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[0][2].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][2].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
+            elif self.whichTile == 6:
+                if self.main.farmland[0].grid[0][2].islocked == False:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[1][2].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
+            elif self.whichTile == 7:
+                if self.main.farmland[0].grid[1][2].islocked == False:
+                    self.gridPlacementX = 1
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                elif self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
+            elif self.whichTile == 8:
+                if self.main.farmland[0].grid[2][2].islocked == False:
+                    self.gridPlacementX = 2
+                    self.gridPlacementY = 2
+                    self.stepCounter = 0
+                else:
+                    self.gridPlacementX = 0
+                    self.gridPlacementY = 0
 
-        if   self.stepCounter < 100:
-             self.gridPlacementX = 0
-
-        elif self.stepCounter > 100 and self.stepCounter < 200:
-             self.gridPlacementX = 1
-
-        elif self.stepCounter > 200 and self.stepCounter < 300:
-             self.gridPlacementX = 2
-
-        elif self.stepCounter == 300:
-             self.gridPlacementX = 0
-             self.stepCounter   = 0
-             self.gridPlacementY += 1
-
-             if self.gridPlacementY == 3:
-                 self.gridPlacementY = 0
+            else:
+                self.gridPlacementX = 0
+                self.gridPlacementY = 0
+            self.stepCounter = 0
 
     def eatGrass(self):
-        if self.gridPlacementX == 0 and self.gridPlacementY == 0:
-            if self.main.farmland[0].grid[0][0].isGrown:
-                self.main.farmland[0].grid[0][0].animating = True
-                self.main.farmland[0].grid[0][0].isGrown = False
-                self.main.coins += 2
+        for i in range(3):
+            for j in range(3):
+                if self.gridPlacementX == i and self.gridPlacementY == j:
+                    if self.main.farmland[0].grid[i][j].isGrown:
+                        self.main.farmland[0].grid[i][j].animating = True
+                        self.main.farmland[0].grid[i][j].isGrown = False
+                        self.main.coins += 2
 
+    def checkTile(self):
+        for i in range(3):
+            for j in range(3):
+                if self.gridPlacementX == i and self.gridPlacementY == j:
+                    self.isTileCorrect = True
 
+                    if j == 0 and i == 0 and self.isTileCorrect == True:
+                        self.whichTile = 1
 
+                    elif j == 0 and i == 1 and self.isTileCorrect == True:
+                        self.whichTile = 2
 
+                    elif j == 0 and i == 2 and self.isTileCorrect == True:
+                        self.whichTile = 3
 
+                    elif j == 1 and i == 0 and self.isTileCorrect == True:
+                        self.whichTile = 4
 
+                    elif j == 1 and i == 1 and self.isTileCorrect == True:
+                        self.whichTile = 5
 
+                    elif j == 1 and i == 2 and self.isTileCorrect == True:
+                        self.whichTile = 6
+
+                    elif j == 2 and i == 0 and self.isTileCorrect == True:
+                        self.whichTile = 7
+
+                    elif j == 2 and i == 1 and self.isTileCorrect == True:
+                        self.whichTile = 8
+
+                    elif j == 2 and i == 2 and self.isTileCorrect == True:
+                        self.whichTile = 9
+        print(self.whichTile)
+    # def checkUnlock(self):
+    # self.main.farmland[0].grid[0][0].islocked
+    # if self.main.farmland[0].grid[0][0].islocked

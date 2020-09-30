@@ -9,7 +9,7 @@ class Sprinkler(FarmGadget):
         super().__init__(farmBoard, farmTile, main)
 
     def gadgetInitiate(self):
-
+        self.neighbouringTiles = []
         boardDimensions = self.farmBoard.getGridSize()
         boardX = boardDimensions[0]
         boardY = boardDimensions[1]
@@ -44,6 +44,7 @@ class Sprinkler(FarmGadget):
         pass #Delet this
 
     def gadgetActivate(self):
+        # print(len(self.neighbouringTiles))
         self.waterTiles()
 
     def waterTiles(self):
