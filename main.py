@@ -149,6 +149,3 @@ class main:
             clock.tick(60)
 
         pygame.quit()
-
-
-main()
