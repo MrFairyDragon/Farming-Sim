@@ -4,11 +4,10 @@ from Board import Board
 
 pygame.init()
 
-
-# farmland[k].grid[0][0].__posX
-# farmland[k].grid[0][0].__posY
+#farmland[k].grid[0][0].__posX
+#farmland[k].grid[0][0].__posY
 class Chicken:
-    def __init__(self, displayName: pygame.display, main):
+    def __init__(self,displayName: pygame.display, main):
         self.displayName = displayName
         self.main = main
 
@@ -24,14 +23,14 @@ class Chicken:
     isTileCorrect: bool = False
     whichTile: int
 
-    def drawChicken(self, posX, posY):
+    def drawChicken(self, posX ,posY):
         self.displayName.blit(self.bigImage, (posX, posY))
 
     def chickenWalk(self):
         self.stepCounter += 1
         print(self.stepCounter)
         if self.stepCounter > 100:
-            if self.whichTile == 1:
+            if   self.whichTile == 1:
                 if self.main.farmland[0].grid[1][0].islocked == False:
                     self.gridPlacementX = 1
                     self.gridPlacementY = 0
@@ -228,7 +227,7 @@ class Chicken:
                 if self.gridPlacementX == i and self.gridPlacementY == j:
                     self.isTileCorrect = True
 
-                    if j == 0 and i == 0 and self.isTileCorrect == True:
+                    if   j == 0 and i == 0 and self.isTileCorrect == True:
                         self.whichTile = 1
 
                     elif j == 0 and i == 1 and self.isTileCorrect == True:
@@ -255,6 +254,20 @@ class Chicken:
                     elif j == 2 and i == 2 and self.isTileCorrect == True:
                         self.whichTile = 9
         print(self.whichTile)
-    # def checkUnlock(self):
-    # self.main.farmland[0].grid[0][0].islocked
-    # if self.main.farmland[0].grid[0][0].islocked
+    #def checkUnlock(self):
+        #self.main.farmland[0].grid[0][0].islocked
+        #if self.main.farmland[0].grid[0][0].islocked
+
+
+
+
+
+
+
+
+
+
+
+
+
+
