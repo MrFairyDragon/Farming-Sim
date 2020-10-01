@@ -55,7 +55,7 @@ class main:
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
                 Shop.clickAndDrag(shop)
-                if not pygame.mouse.get_pressed()[0] and mousePressed == True and shop.buying == None:
+                if not pygame.mouse.get_pressed()[0] and mousePressed and shop.buying is None:
                     mousePressed = False
                     mousePos = pygame.mouse.get_pos()
 
@@ -90,7 +90,7 @@ class main:
                                         self.farmland[k].grid[i][j].water()
 
                 # This is done to get a click instead of a press
-                elif pygame.mouse.get_pressed()[0] and shop.isBuying == False:
+                elif pygame.mouse.get_pressed()[0] and not shop.isBuying:
                     mousePressed = True
 
             # Main Event loop end

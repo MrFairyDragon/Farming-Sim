@@ -86,13 +86,3 @@ class Shop:
                 self.sprinklerCount += 1
                 print(self.sprinklerCount)
         self.buying = None
-
-    def drawRect(self, color):
-        pygame.draw.rect(self.main.screen, color, [self.__posX, self.__posY, self.__sizeX, self.__sizeY])
-
-    def addText(self, text, textColor):
-        font = pygame.font.Font('COMIC.TTF', 20)
-        text = font.render(text, True, textColor, None)
-        textRect = text.get_rect()
-        textRect.center = (self.__posX + (self.__sizeX / 2), self.__posY + (self.__sizeY / 2))
-        self.main.screen.blit(text, textRect)
