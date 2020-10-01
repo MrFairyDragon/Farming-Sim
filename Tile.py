@@ -31,6 +31,7 @@ class Tile:
         self.time = 2000
         self.growTimer = self.time
 
+        self.isOccupied = False
         self.isShaking = False
         self.isWatered = False
         self.isGrown = False
@@ -46,6 +47,7 @@ class Tile:
         grassImg = pygame.image.load(backgroundImg)
         grassImg = pygame.transform.scale(grassImg, [int(self.__sizeX), int(self.__sizeY)])
         carrotImg = pygame.image.load(foregroundImg)
+        carrotImg = pygame.transform.scale(carrotImg, (64, 64))
         self.main.screen.blit(grassImg, (self.__posX, self.__posY))
 
         if index == 0:
@@ -75,18 +77,21 @@ class Tile:
             self.addText(f'{self.main.tilebuy}', (0, 0, 0))
 
         elif self.isGrown:
-            self.drawTile(2, 'Grass/Grass01.png', 'Carrot.png')
+            self.drawTile(2, 'Grass/Grass01.png', f'{self.name}.png')
 
         # Ready to be watered for the first time (Red)
-        elif not self.isWatered and not self.isGrown and self.growTimer == self.time:
-            self.drawTile(0, 'Grass/Grass01.png', 'Carrot.png')
+        elif not self.isWatered and not self.isGrown and self.growTimer == self.time and not self.isOccupied:
+            self.drawTile(0, 'Grass/Grass01.png', f'{self.name}.png')
 
         elif self.isWatered:
-            self.drawTile(1, 'Grass/Grass01.png', 'Carrot.png')
+            self.drawTile(1, 'Grass/Grass01.png', f'{self.name}.png')
+
+        elif self.isOccupied:
+            self.drawTile(2, 'Grass/Grass01.png', f'{self.name}.png')
 
         # Ready to be watered again after it failed the tick method (yellow and blue)
         else:
-            self.drawTile(1, 'Grass/Grass01.png', 'Carrot.png')
+            self.drawTile(1, 'Grass/Grass01.png', f'{self.name}.png')
 
     # Animation click
     def animation(self, scale, speed):
@@ -171,7 +176,8 @@ class Tile:
         self.main.coins += 1
 
     def water(self):
-        self.isWatered = True
+        if not self.isOccupied:
+            self.isWatered = True
 
     def grow(self):
         if self.isWatered and not self.islocked and not \

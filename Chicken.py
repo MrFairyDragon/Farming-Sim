@@ -27,7 +27,7 @@ class Chicken:
 
     def chickenWalk(self):
         self.stepCounter += 1
-        print(self.stepCounter)
+        # print(self.stepCounter)
         if self.stepCounter > 100:
             if self.whichTile == 1:
                 if not self.main.farmland[0].grid[1][0].islocked:
@@ -252,7 +252,7 @@ class Chicken:
 
                     elif j == 2 and i == 2 and self.isTileCorrect:
                         self.whichTile = 9
-        print(self.whichTile)
+       # print(self.whichTile)
     # def checkUnlock(self):
     # self.main.farmland[0].grid[0][0].islocked
     # if self.main.farmland[0].grid[0][0].islocked

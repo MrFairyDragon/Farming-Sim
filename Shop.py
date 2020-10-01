@@ -17,6 +17,8 @@ class Shop:
         self.sprinklerCount = 0
 
         self.chickenImg = pygame.image.load('Choiken.gif')
+        self.sprinklerImg = pygame.image.load('Sprinkler.png')
+        self.grassImg = pygame.image.load('Grass/Grass01.png')
 
     def draw(self):
         self.main.screen
@@ -24,12 +26,18 @@ class Shop:
 
         #Chicken
         pygame.draw.rect(self.main.screen, [64, 64, 64], [self.__posX+self.__posOffset, self.__posY+(1 * self.__posOffset), 64, 64])
+        self.grassImg = pygame.transform.scale(self.grassImg, (64, 64))
+        self.main.screen.blit(self.grassImg, (self.__posX + 16, self.__posY + self.__posOffset))
         self.chickenImg = pygame.transform.scale(self.chickenImg, (64, 64))
         self.main.screen.blit(self.chickenImg, (self.__posX+16, self.__posY+self.__posOffset))
 
         #Sprinkler
         pygame.draw.rect(self.main.screen, [0, 0, 255], [self.__posX + self.__posOffset,
                                                          self.__posY + 64 + (2 * self.__posOffset), 64, 64])
+        self.grassImg = pygame.transform.scale(self.grassImg, (64, 64))
+        self.main.screen.blit(self.grassImg, (self.__posX + self.__posOffset, self.__posY + 64 + (2 * self.__posOffset)))
+        self.sprinklerImg = pygame.transform.scale(self.sprinklerImg, (64,64))
+        self.main.screen.blit(self.sprinklerImg, (self.__posX + self.__posOffset, self.__posY + 64 + (2 * self.__posOffset)))
         font = pygame.font.Font('COMIC.TTF', 16)
         text = font.render(f'{self.sprinklerCount}/4', True, (0, 0, 0), None)
         textRect = text.get_rect()
@@ -78,9 +86,11 @@ class Shop:
 
 
     def buySprinkler(self, farmland, k):
-        if not farmland.islocked and not farmland.isHardLocked:
+        if not farmland.islocked and not farmland.isHardLocked and not farmland.isOccupied:
             if self.main.coins >= 10 and not self.sprinklerCount == 4:
                 self.main.coins -= 10
+                farmland.isOccupied = True
+                farmland.name = 'Sprinkler'
                 self.main.sprinklerArray[self.sprinklerCount] = Sprinkler(self.main.farmland[k], farmland, self.main)
                 self.main.sprinklerArray[self.sprinklerCount].gadgetInitiate()
                 self.sprinklerCount += 1

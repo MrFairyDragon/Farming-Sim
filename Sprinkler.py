@@ -48,5 +48,5 @@ class Sprinkler(FarmGadget):
 
     def waterTiles(self):
         for tile in self.neighbouringTiles:
-            if not tile.isWatered and not tile.isGrown:
+            if not tile.isWatered and not tile.isGrown and not tile.isOccupied:
                 tile.isWatered = True
