@@ -22,17 +22,22 @@ class main:
         font = pygame.font.Font('COMIC.TTF', 20)
         carryOn = True
         self.clock = pygame.time.Clock()
+        self.counter = 0
+        self.skyImg = pygame.image.load('Sky_Skrr.png')
+        self.isTrue = True
 
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
+
         self.farmarray = [[self.size[0] / 10, self.size[1] / 10, 3, 3],
-                     [self.size[0] / 2, self.size[1] / 10, 3, 7],
-                     [self.size[0] / 10, self.size[1] / 2, 3, 3]]
+                          [self.size[0] / 2, self.size[1] / 10, 3, 7],
+                          [self.size[0] / 10, self.size[1] / 2, 3, 3]]
 
         # Makes the self.farmlands with the above positions and self.sizes
-        self.farmland = [Board(self.farmarray[0][0], self.farmarray[0][1], self.farmarray[0][2], self.farmarray[0][3], self, 0),
-                    Board(self.farmarray[1][0], self.farmarray[1][1], self.farmarray[1][2], self.farmarray[1][3], self, 1),
-                    Board(self.farmarray[2][0], self.farmarray[2][1], self.farmarray[2][2], self.farmarray[2][3], self, 2)]
+        self.farmland = [
+            Board(self.farmarray[0][0], self.farmarray[0][1], self.farmarray[0][2], self.farmarray[0][3], self, 0),
+            Board(self.farmarray[1][0], self.farmarray[1][1], self.farmarray[1][2], self.farmarray[1][3], self, 1),
+            Board(self.farmarray[2][0], self.farmarray[2][1], self.farmarray[2][2], self.farmarray[2][3], self, 2)]
 
         test = Chicken(self.screen, self)
         shop = Shop(self)
@@ -43,11 +48,12 @@ class main:
         self.farmland[0].grid[0][0].islocked = False
 
         # -------- Main Program Loop -----------
+
         while carryOn:
+            self.BackgroundScroll()
             text = font.render(f'Coins: {self.coins}', True, (255, 255, 255), None)
             textRect = text.get_rect()
             textRect.center = (50, 25)
-
             # --- Main event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -59,14 +65,14 @@ class main:
                     mousePressed = False
                     mousePos = pygame.mouse.get_pos()
 
-
                     # Runs trough all the tiles
                     for k in range(len(self.farmarray)):
                         for i in range(self.farmarray[k][2]):
                             for j in range(self.farmarray[k][3]):
 
                                 # Mouse clicks on tile
-                                if self.farmarray[k][0] + (i * 70) <= mousePos[0] <= self.farmarray[k][0] + (i * 70) + 64 \
+                                if self.farmarray[k][0] + (i * 70) <= mousePos[0] <= self.farmarray[k][0] + (
+                                        i * 70) + 64 \
                                         and self.farmarray[k][1] + (j * 70) <= mousePos[1] <= self.farmarray[k][1] + (
                                         j * 70) + 64:
 
@@ -92,7 +98,6 @@ class main:
                 # This is done to get a click instead of a press
                 elif pygame.mouse.get_pressed()[0] and not shop.isBuying:
                     mousePressed = True
-
             # Main Event loop end
 
             # This is the main loop the difference between this loop and the main event loop is that the other loop
@@ -105,9 +110,9 @@ class main:
                         self.farmland[k].grid[i][j].grow()
 
             # Draws everything on the screen
-            self.screen.fill([0, 0, 0])
-            self.skyImg = pygame.image.load('Sky_Skrr.png')
-            self.screen.blit(self.skyImg, (0, 0))
+            # self.screen.fill([0, 0, 0])
+            # self.skyImg = pygame.image.load('Sky_Skrr.png')
+            # self.screen.blit(self.skyImg, (0, 0))
             self.screen.blit(text, textRect)
 
             for k in range(len(self.farmarray)):
@@ -129,3 +134,11 @@ class main:
             self.clock.tick(60)
 
         pygame.quit()
+
+    def BackgroundScroll(self):
+        self.screen.blit(self.skyImg, (0 + (1 * self.counter), 0))
+        self.screen.blit(self.skyImg, (-self.size[0] + (1 * self.counter), 0))
+        if self.isTrue:
+            self.counter += 1
+        if self.counter == 800:
+            self.counter = 0
