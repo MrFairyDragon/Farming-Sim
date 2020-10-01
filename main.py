@@ -120,7 +120,7 @@ class main:
                     self.sprinklerArray[i].gadgetActivate()
             test.drawChicken(self.farmland[0].grid[test.gridPlacementX][test.gridPlacementY].defaultPosX,
                              self.farmland[0].grid[test.gridPlacementX][test.gridPlacementY].defaultPosY)
-
+            test.checkTile()
             test.chickenWalk()
             test.eatGrass()
             shop.draw()

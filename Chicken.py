@@ -30,7 +30,7 @@ class Chicken:
         self.stepCounter += 1
         print(self.stepCounter)
         if self.stepCounter > 100:
-            if   self.whichTile == 1:
+            if self.whichTile == 1:
                 if self.main.farmland[0].grid[1][0].islocked == False:
                     self.gridPlacementX = 1
                     self.gridPlacementY = 0

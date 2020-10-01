@@ -1,5 +1,7 @@
-__pycache__
+__pycache__/
 venv
 logs/
 dist/
 build/
+.idea/workspace.xml
+
