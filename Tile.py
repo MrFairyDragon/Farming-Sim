@@ -47,7 +47,7 @@ class Tile:
         grassImg = pygame.image.load(backgroundImg)
         grassImg = pygame.transform.scale(grassImg, [int(self.__sizeX), int(self.__sizeY)])
         carrotImg = pygame.image.load(foregroundImg)
-        carrotImg = pygame.transform.scale(carrotImg, (64, 64))
+        carrotImg = pygame.transform.scale(carrotImg, [int(self.__sizeX), int(self.__sizeY)])
         self.main.screen.blit(grassImg, (self.__posX, self.__posY))
 
         if index == 0:
@@ -200,6 +200,6 @@ class Tile:
                 self.isShaking = True
 
         # Runs the animations all the time but they are only active
-        # if there booleans are true (read line 88)
+        # if there booleans are true (read line 98)
         self.shake(4, 120)
         self.animation(2, 40)
