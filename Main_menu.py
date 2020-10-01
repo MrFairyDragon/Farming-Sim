@@ -16,6 +16,7 @@ class Main_menu:
         self.__isPaused = False
         self.Widget1 = pygame.image.load('main_menu_assets/Multiplayer_Buttons.png')
         self.background = pygame.image.load('Sky_Skrr.png')
+        # self.background = pygame.transform.scale(self.background, self.size)
         self.font = pygame.font.Font('COMIC.TTF', 20)
         self.blue = (0, 0, 128)
         self.text = self.font.render('Play', True, self.blue)
@@ -36,7 +37,6 @@ class Main_menu:
                         self.isRunning = False
 
     def main_menu(self):
-        pygame.init()
         if self.isRunning:
             while self.isRunning:
                 self.__screen.blit(self.background, (0 + (1 * self.counter), 0))
