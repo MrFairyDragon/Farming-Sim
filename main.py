@@ -50,7 +50,6 @@ class main:
         # -------- Main Program Loop -----------
 
         while carryOn:
-            self.BackgroundScroll()
             text = font.render(f'Coins: {self.coins}', True, (255, 255, 255), None)
             textRect = text.get_rect()
             textRect.center = (50, 25)
@@ -110,9 +109,7 @@ class main:
                         self.farmland[k].grid[i][j].grow()
 
             # Draws everything on the screen
-            # self.screen.fill([0, 0, 0])
-            # self.skyImg = pygame.image.load('Sky_Skrr.png')
-            # self.screen.blit(self.skyImg, (0, 0))
+            self.BackgroundScroll()
             self.screen.blit(text, textRect)
 
             for k in range(len(self.farmarray)):
