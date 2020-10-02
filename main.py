@@ -39,7 +39,7 @@ class main:
             Board(self.farmarray[1][0], self.farmarray[1][1], self.farmarray[1][2], self.farmarray[1][3], self, 1),
             Board(self.farmarray[2][0], self.farmarray[2][1], self.farmarray[2][2], self.farmarray[2][3], self, 2)]
 
-        test = Chicken(self.screen, self)
+        test = Chicken(self.screen, self.farmland[1], self)
         shop = Shop(self)
         # Unlocks the first self.farmland and the first tile in the self.farmland
         for i in range(self.farmarray[0][2]):
@@ -120,9 +120,7 @@ class main:
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-            test.drawChicken(self.farmland[0].grid[test.gridPlacementX][test.gridPlacementY].defaultPosX,
-                             self.farmland[0].grid[test.gridPlacementX][test.gridPlacementY].defaultPosY)
-            test.checkTile()
+            test.drawChicken()
             test.chickenWalk()
             test.eatGrass()
             shop.draw()
