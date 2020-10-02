@@ -40,7 +40,7 @@ class Sprinkler(FarmGadget):
             self.neighbouringTiles.append(self.farmBoard.grid[tileX + 1, tileY + 1])
 
     def gadgetShutdown(self):
-        pass  # Delet this
+        pass
 
     def gadgetActivate(self):
         # print(len(self.neighbouringTiles))
@@ -50,3 +50,7 @@ class Sprinkler(FarmGadget):
         for tile in self.neighbouringTiles:
             if not tile.isWatered and not tile.isGrown and not tile.isOccupied:
                 tile.isWatered = True
+
+    def getTileLocation(self):
+        return self.farmTile.getGridIndexes()
+
