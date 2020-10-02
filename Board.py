@@ -20,3 +20,28 @@ class Board:
 
     def getGridSize(self) -> []:
         return [self.__SizeX, self.__SizeY]
+
+    def getNextFreeTile(self, startPos) -> Tile:
+
+        freeTile: Tile = self.grid[startPos[0], startPos[1]]
+        found = False
+
+        posX = startPos[0]
+        posY = startPos[1]
+
+        while not found:
+            posX += 1
+            if posX == self.__SizeX:
+                posX = 0
+                posY += 1
+                if posY == self.__SizeY:
+                    posY = 0
+
+            if not self.grid[posX, posY].islocked and not self.grid[posX, posY].isOccupied:
+                freeTile = self.grid[posX, posY]
+                found = True
+
+            if posX == startPos[0] and posY == startPos[1]:
+                break
+
+        return freeTile
