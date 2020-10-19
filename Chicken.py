@@ -14,11 +14,11 @@ class Chicken:
         self.main = main
 
         # create a surface object, image is drawn on it.
-        self.image = pygame.image.load("Choiken.gif")
+        self.image = pygame.image.load("Assets/Choiken.gif")
         self.bigImage = pygame.transform.scale(self.image, (55, 55))
 
         self.myLand = farmland
-        self.myTile = farmland.grid[0, 0]
+        self.myTile = farmland.board[0, 0]
 
     chickenChillTime: int = 100
     chickenChillTimer: int = 0

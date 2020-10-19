@@ -19,25 +19,25 @@ class Sprinkler(FarmGadget):
 
         # Set 3 tiles on the left
         if (tileX > 0 and tileY > 0):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX - 1, tileY - 1])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX - 1, tileY - 1])
         if (tileX > 0):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX - 1, tileY])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX - 1, tileY])
         if (tileX > 0 and tileY < boardY - 1):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX - 1, tileY + 1])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX - 1, tileY + 1])
 
         # Set tiles above and below
         if (tileY > 0):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX, tileY - 1])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX, tileY - 1])
         if (tileY < boardY - 1):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX, tileY + 1])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX, tileY + 1])
 
         # Set 3 tiles to the right
         if (tileX < boardX - 1 and tileY > 0):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX + 1, tileY - 1])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX + 1, tileY - 1])
         if (tileX < boardX - 1):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX + 1, tileY])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX + 1, tileY])
         if (tileX < boardX - 1 and tileY < boardY - 1):
-            self.neighbouringTiles.append(self.farmBoard.grid[tileX + 1, tileY + 1])
+            self.neighbouringTiles.append(self.farmBoard.board[tileX + 1, tileY + 1])
 
     def gadgetShutdown(self):
         pass
