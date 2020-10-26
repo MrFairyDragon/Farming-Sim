@@ -15,10 +15,10 @@ class Main_menu:
         self.__screen = pygame.display.set_mode(self.size)
         self.__isInMenu = True
         self.__isPaused = False
-        self.Widget1 = pygame.image.load('main_menu_assets/Multiplayer_Buttons.png')
-        self.background = pygame.image.load('Sky_Skrr.png')
+        self.Widget1 = pygame.image.load('Assets/Multiplayer_Buttons.png')
+        self.background = pygame.image.load('Assets/Sky_Skrr.png')
         # self.background = pygame.transform.scale(self.background, self.size)
-        self.font = pygame.font.Font('COMIC.TTF', 20)
+        self.font = pygame.font.Font('Fonts/COMIC.TTF', 20)
         self.blue = (0, 0, 128)
         self.text = self.font.render('Play', True, self.blue)
         self.playCoordinates = (300, 280)
@@ -31,7 +31,7 @@ class Main_menu:
         self.counter = 0
         self.indexCount = 0
         self.isTrue = True
-        self.spriteSheet = pygame.image.load('main_menu_assets/Pepper_publish.png')
+        self.spriteSheet = pygame.image.load('Assets/Pepper_publish.png')
         self.scaleUp = pygame.transform.scale(self.spriteSheet, (540, 384))
         self.spriteList = [(3*3, 3*3, 18*3, 29*3),
                            (27*3, 2*3, 18*3, 30*3),

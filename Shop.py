@@ -1,24 +1,25 @@
 from Chicken import Chicken
 import pygame
 from Sprinkler import Sprinkler
+from Grid import Grid
 
 
 class Shop:
 
     def __init__(self, main):
         self.main = main
-        self.__posX = self.main.size[0] - self.main.size[0] / 8
+        self.__posX = (self.main.grid.sizeX + 1) * 64
         self.__posY = 0
         self.__posOffset = 16
-        self.__sizeX = self.main.size[0] / 8
+        self.__sizeX = self.main.size[0] -96
         self.__sizeY = self.main.size[1]
         self.buying = None
         self.isBuying = False
         self.sprinklerCount = 0
 
-        self.chickenImg = pygame.image.load('Choiken.gif')
-        self.sprinklerImg = pygame.image.load('Sprinkler.png')
-        self.grassImg = pygame.image.load('Grass/Grass01.png')
+        self.chickenImg = pygame.image.load('Assets/Choiken.gif')
+        self.sprinklerImg = pygame.image.load('Assets/Sprinkler.png')
+        self.grassImg = pygame.image.load('Assets/Grass/Grass01.png')
 
     def draw(self):
         self.main.screen
@@ -41,13 +42,13 @@ class Shop:
         self.sprinklerImg = pygame.transform.scale(self.sprinklerImg, (64, 64))
         self.main.screen.blit(self.sprinklerImg,
                               (self.__posX + self.__posOffset, self.__posY + 64 + (2 * self.__posOffset)))
-        font = pygame.font.Font('COMIC.TTF', 16)
+        font = pygame.font.Font('Fonts/COMIC.TTF', 16)
         text = font.render(f'{self.sprinklerCount}/4', True, (0, 0, 0), None)
         textRect = text.get_rect()
         textRect.center = (self.__posX + self.__posOffset + 16, self.__posY + 64 + (2 * self.__posOffset) + 48)
         self.main.screen.blit(text, textRect)
 
-        font = pygame.font.Font('COMIC.TTF', 16)
+        font = pygame.font.Font('Fonts/COMIC.TTF', 16)
         text = font.render(f'10', True, (0, 0, 0), None)
         textRect = text.get_rect()
         textRect.center = (self.__posX + self.__posOffset + 48, self.__posY + 64 + (2 * self.__posOffset) + 48)
@@ -105,12 +106,13 @@ class Shop:
                                     j * 70) + 64:
                                 if self.buying == "Sprinkler":
                                     print("Buy")
-                                    self.buySprinkler(self.main.farmland[k].grid[i][j], k)
+                                    self.buySprinkler(self.main.farmland[k].board[i][j], k)
                                     return
-                                if self.buying == "Sell":
+                                elif self.buying == "Sell":
                                     print("Sell")
-                                    self.sell(self.main.farmland[k].grid[i][j], k)
+                                    self.sell(self.main.farmland[k].board[i][j], k)
                                     return
+            return
 
     def buySprinkler(self, farmland, k):
         if not farmland.islocked and not farmland.isHardLocked and not farmland.isOccupied:

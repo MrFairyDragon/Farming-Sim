@@ -1,7 +1,12 @@
 import pygame
+import numpy as np
 from Board import Board
 from Chicken import Chicken
 from Shop import Shop
+from Node import Node
+from Grid import Grid
+from astar import astar
+from GameObject import GameObject
 import random
 
 
@@ -16,36 +21,48 @@ class main:
         self.farmlandbuy = 20
         self.sprinklerArray = [None, None, None, None, None]
 
-        self.size = (800, 600)
+        self.size = (800, 576)
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Farming simulator")
-        font = pygame.font.Font('COMIC.TTF', 20)
+        font = pygame.font.Font('Fonts/COMIC.TTF', 20)
         carryOn = True
         self.clock = pygame.time.Clock()
         self.counter = 0
-        self.skyImg = pygame.image.load('Sky_Skrr.png')
+        self.skyImg = pygame.image.load('Assets/Sky_Skrr.png')
         self.isTrue = True
+        self.grid = Grid(self, 10, 12)
 
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
 
-        self.farmarray = [[self.size[0] / 10, self.size[1] / 10, 3, 3],
-                          [self.size[0] / 2, self.size[1] / 10, 3, 7],
-                          [self.size[0] / 10, self.size[1] / 2, 3, 3]]
-
+        self.farmarray = [[64, 64, 3, 3],
+                          [320, 64, 3, 7],
+                          [64, 320, 3, 3]]
+        self.farmland = np.ndarray(shape=(len(self.farmarray)), dtype=Board)
         # Makes the self.farmlands with the above positions and self.sizes
-        self.farmland = [
-            Board(self.farmarray[0][0], self.farmarray[0][1], self.farmarray[0][2], self.farmarray[0][3], self, 0),
-            Board(self.farmarray[1][0], self.farmarray[1][1], self.farmarray[1][2], self.farmarray[1][3], self, 1),
-            Board(self.farmarray[2][0], self.farmarray[2][1], self.farmarray[2][2], self.farmarray[2][3], self, 2)]
+        for i in range(len(self.farmarray)):
+            print(i)
+            self.farmland[i] = Board(self.farmarray[i][0], self.farmarray[i][1], self.farmarray[i][2],
+                                     self.farmarray[i][3], self, self.grid, i)
 
         test = Chicken(self.screen, self.farmland[1], self)
         shop = Shop(self)
+        self.astar = astar()
+        Agrid = astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY, self)
+        for i in range(len(Agrid)):
+            for j in range(len(Agrid)):
+                node = Agrid[i][j]
+                print(Agrid[i][j])
+                node.update_neighbors(Agrid)
+        astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[2][2])
+
+
+
         # Unlocks the first self.farmland and the first tile in the self.farmland
         for i in range(self.farmarray[0][2]):
             for j in range(self.farmarray[0][3]):
-                self.farmland[0].grid[i][j].isHardLocked = False
-        self.farmland[0].grid[0][0].islocked = False
+                self.farmland[0].board[i][j].isHardLocked = False
+        self.farmland[0].board[0][0].islocked = False
 
         # -------- Main Program Loop -----------
 
@@ -60,7 +77,7 @@ class main:
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
                 Shop.clickAndDrag(shop)
-                if not pygame.mouse.get_pressed()[0] and mousePressed and shop.buying is None:
+                if not pygame.mouse.get_pressed()[0] and mousePressed:
                     mousePressed = False
                     mousePos = pygame.mouse.get_pos()
 
@@ -75,24 +92,24 @@ class main:
                                         and self.farmarray[k][1] + (j * 70) <= mousePos[1] <= self.farmarray[k][1] + (
                                         j * 70) + 64:
 
-                                    self.farmland[k].grid[i][j].animating = True
+                                    self.farmland[k].board[i][j].animating = True
 
                                     # Tile is hard locked
-                                    if self.farmland[k].grid[i][j].isHardLocked and self.coins >= self.farmlandbuy:
-                                        self.farmland[k].grid[i][j].hardUnlock()
+                                    if self.farmland[k].board[i][j].isHardLocked and self.coins >= self.farmlandbuy:
+                                        self.farmland[k].board[i][j].hardUnlock()
 
                                     # Tile is locked
-                                    elif self.farmland[k].grid[i][j].islocked and self.coins >= self.tilebuy \
-                                            and not self.farmland[k].grid[i][j].isHardLocked:
-                                        self.farmland[k].grid[i][j].unlock()
+                                    elif self.farmland[k].board[i][j].islocked and self.coins >= self.tilebuy \
+                                            and not self.farmland[k].board[i][j].isHardLocked:
+                                        self.farmland[k].board[i][j].unlock()
 
                                     # Tile is grown
-                                    elif self.farmland[k].grid[i][j].isGrown:
-                                        self.farmland[k].grid[i][j].harvest()
+                                    elif self.farmland[k].board[i][j].isGrown:
+                                        self.farmland[k].board[i][j].harvest()
 
                                     # Tile is watered
-                                    elif not self.farmland[k].grid[i][j].isWatered:
-                                        self.farmland[k].grid[i][j].water()
+                                    elif not self.farmland[k].board[i][j].isWatered:
+                                        self.farmland[k].board[i][j].water()
 
                 # This is done to get a click instead of a press
                 elif pygame.mouse.get_pressed()[0] and not shop.isBuying:
@@ -106,7 +123,7 @@ class main:
             for k in range(len(self.farmarray)):
                 for i in range(self.farmarray[k][2]):
                     for j in range(self.farmarray[k][3]):
-                        self.farmland[k].grid[i][j].grow()
+                        self.farmland[k].board[i][j].grow()
 
             # Draws everything on the screen
             self.BackgroundScroll()
@@ -115,7 +132,7 @@ class main:
             for k in range(len(self.farmarray)):
                 for i in range(self.farmarray[k][2]):
                     for j in range(self.farmarray[k][3]):
-                        self.farmland[k].grid[i][j].draw()
+                        self.farmland[k].board[i][j].draw()
 
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
@@ -124,6 +141,9 @@ class main:
             test.chickenWalk()
             test.eatGrass()
             shop.draw()
+
+            self.grid.draw()
+
             pygame.display.flip()
 
             self.clock.tick(60)

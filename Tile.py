@@ -2,6 +2,8 @@ import math
 import pygame
 import random
 
+from GameObject import GameObject
+
 
 def rescale(X, A, B, C, D):
     newValue = ((float(X - A) / (B - A)) * (D - C)) + C
@@ -60,7 +62,7 @@ class Tile:
             self.main.screen.blit(carrotImg, (self.__posX, self.__posY))
 
     def addText(self, text, textColor):
-        font = pygame.font.Font('COMIC.TTF', 20)
+        font = pygame.font.Font('Fonts/COMIC.TTF', 20)
         text = font.render(text, True, textColor, None)
         textRect = text.get_rect()
         textRect.center = (self.__posX + (self.__sizeX / 2), self.__posY + (self.__sizeY / 2))
@@ -77,21 +79,21 @@ class Tile:
             self.addText(f'{self.main.tilebuy}', (0, 0, 0))
 
         elif self.isGrown:
-            self.drawTile(2, 'Grass/Grass01.png', f'{self.name}.png')
+            self.drawTile(2, 'Assets/Grass/Grass01.png', f'Assets/{self.name}.png')
 
         # Ready to be watered for the first time (Red)
         elif not self.isWatered and not self.isGrown and self.growTimer == self.time and not self.isOccupied:
-            self.drawTile(0, 'Grass/Grass01.png', f'{self.name}.png')
+            self.drawTile(0, 'Assets/Grass/Grass01.png', f'Assets/{self.name}.png')
 
         elif self.isWatered:
-            self.drawTile(1, 'Grass/Grass01.png', f'{self.name}.png')
+            self.drawTile(1, 'Assets/Grass/Grass01.png', f'Assets/{self.name}.png')
 
         elif self.isOccupied:
-            self.drawTile(2, 'Grass/Grass01.png', f'{self.name}.png')
+            self.drawTile(2, 'Assets/Grass/Grass01.png', f'Assets/{self.name}.png')
 
         # Ready to be watered again after it failed the tick method (yellow and blue)
         else:
-            self.drawTile(1, 'Grass/Grass01.png', f'{self.name}.png')
+            self.drawTile(1, 'Assets/Grass/Grass01.png', f'Assets/{self.name}.png')
 
     # Animation click
     def animation(self, scale, speed):
@@ -163,7 +165,7 @@ class Tile:
         self.main.farmlandbuy += 10
         for i in range(self.main.farmarray[self.farmindex][2]):
             for j in range(self.main.farmarray[self.farmindex][3]):
-                self.main.farmland[self.farmindex].grid[i][j].isHardLocked = False
+                self.main.farmland[self.farmindex].board[i][j].isHardLocked = False
         self.islocked = False
 
     def unlock(self):
