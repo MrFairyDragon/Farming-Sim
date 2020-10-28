@@ -1,7 +1,6 @@
 import pygame
 from main import main
 import sys
-import time
 
 
 def StartTheGame():

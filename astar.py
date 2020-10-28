@@ -44,7 +44,6 @@ class astar:
                 end.make_end()
                 return True
 
-            print(current.neighbors)
             for neighbor in current.neighbors:
                 temp_g_score = g_score[current] + 1
                 if temp_g_score < g_score[neighbor]:
@@ -54,11 +53,9 @@ class astar:
 
                     if neighbor not in open_set_hash:
                         count += 1
-                        print(f'f_score: {f_score[neighbor]}')
                         open_set.put((f_score[neighbor], count, neighbor))
                         open_set_hash.add(neighbor)
                         neighbor.make_open()
-                        print(count)
             if current != start:
                 current.make_closed()
         return False;
