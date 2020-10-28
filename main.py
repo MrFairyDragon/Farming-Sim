@@ -73,7 +73,7 @@ class main:
                 if event.type == pygame.QUIT:
                     carryOn = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[self.Player.translateMousePosToGridPos()[0]]
+                    Astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[self.Player.translateMousePosToGridPos()[0]]
                                                                          [self.Player.translateMousePosToGridPos()[1]])
                     print(self.Player.translateMousePosToGridPos())
 
@@ -112,9 +112,9 @@ class main:
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-            test.drawChicken()
-            test.chickenWalk()
-            test.eatGrass()
+            # test.drawChicken()
+            # test.chickenWalk()
+            # test.eatGrass()
             self.Player.setScaleRatioFemale(2)
             Player.DrawCharacter(self.Player,
                                  self.screen,
@@ -125,7 +125,7 @@ class main:
                                  self.Player.getEastCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
                                  self.Player.getSouthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
 
-            shop.draw()
+            self.shop.draw()
 
             self.grid.draw()
 

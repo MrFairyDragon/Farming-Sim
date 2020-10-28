@@ -22,10 +22,10 @@ class Grid:
                 for j in range(self.main.farmarray[k][3]):
 
                     # Mouse clicks on tile
-                    if self.main.farmarray[k][0] + (i * 70) <= self.main.mousePos[0] <= self.main.farmarray[k][0] + (
-                            i * 70) + 64 \
-                            and self.main.farmarray[k][1] + (j * 70) <= self.main.mousePos[1] <= self.main.farmarray[k][1] + (
-                            j * 70) + 64:
+                    if (self.main.farmarray[k][0] * 64) + (i * 64) <= self.main.mousePos[0] <= (self.main.farmarray[k][0] * 64) + (
+                            i * 64) + 64 \
+                            and (64 * self.main.farmarray[k][1]) + (j * 64) <= self.main.mousePos[1] <= (64 * self.main.farmarray[k][1]) + (
+                            j * 64) + 64:
 
                         self.main.farmland[k].board[i][j].animating = True
 

@@ -1,6 +1,6 @@
 import pygame
 import numpy as np
-from astar import astar
+from Astar import Astar
 from Grid import Grid
 from Tile import Tile
 
