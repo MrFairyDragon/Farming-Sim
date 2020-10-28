@@ -161,9 +161,6 @@ class Tile(GameObject):
     def getGridIndexes(self) -> []:
         return [self.boardPosX, self.boardPosY]
 
-    def getGridPos(self):
-        return self.gridPosX, self.gridPosY
-
     def hardUnlock(self):
         self.main.coins -= self.main.farmlandbuy
         self.main.farmlandbuy += 10
