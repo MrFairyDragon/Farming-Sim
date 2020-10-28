@@ -8,6 +8,7 @@ from Node import Node
 from Astar import Astar
 from GameObject import GameObject
 import random
+from Player import Player
 
 
 class main:
@@ -15,12 +16,11 @@ class main:
     def __init__(self):
         pygame.init()
         mousePressed = False
-
         self.coins = 1000
         self.tilebuy = 1
         self.farmlandbuy = 20
         self.sprinklerArray = [None, None, None, None, None]
-
+        self.Player = Player(self, (375, 130))
         self.size = (800, 576)
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Farming simulator")
@@ -31,7 +31,7 @@ class main:
         self.skyImg = pygame.image.load('Assets/Sky_Skrr.png')
         self.isTrue = True
         self.grid = Grid(self, 10, 12)
-
+        self.Player.setIndexCounter(0)
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
 
@@ -54,9 +54,7 @@ class main:
                 node = Agrid[i][j]
                 print(Agrid[i][j])
                 node.update_neighbors(Agrid)
-        Astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[2][2])
-
-
+                # astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[9][9])
 
         # Unlocks the first self.farmland and the first tile in the self.farmland
         for i in range(self.farmarray[0][2]):
@@ -74,6 +72,10 @@ class main:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     carryOn = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    Astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[self.Player.translateMousePosToGridPos()[0]]
+                                                                         [self.Player.translateMousePosToGridPos()[1]])
+                    print(self.Player.translateMousePosToGridPos())
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
                 Shop.clickAndDrag(self.shop)
@@ -82,33 +84,7 @@ class main:
                     mousePressed = False
 
                     # Runs trough all the tiles
-                    for k in range(len(self.farmarray)):
-                        for i in range(self.farmarray[k][2]):
-                            for j in range(self.farmarray[k][3]):
-
-                                # Mouse clicks on tile
-                                if (self.farmarray[k][0]*64) + (i * 64) <= mousePos[0] <= (self.farmarray[k][0]*64) + (
-                                        i * 64) + 64 \
-                                        and (64*self.farmarray[k][1]) + (j * 64) <= mousePos[1] <= (64*self.farmarray[k][1]) + (
-                                        j * 64) + 64:
-                                    self.farmland[k].board[i][j].animating = True
-
-                                    # Tile is hard locked
-                                    if self.farmland[k].board[i][j].isHardLocked and self.coins >= self.farmlandbuy:
-                                        self.farmland[k].board[i][j].hardUnlock()
-
-                                    # Tile is locked
-                                    elif self.farmland[k].board[i][j].islocked and self.coins >= self.tilebuy \
-                                            and not self.farmland[k].board[i][j].isHardLocked:
-                                        self.farmland[k].board[i][j].unlock()
-
-                                    # Tile is grown
-                                    elif self.farmland[k].board[i][j].isGrown:
-                                        self.farmland[k].board[i][j].harvest()
-
-                                    # Tile is watered
-                                    elif not self.farmland[k].board[i][j].isWatered:
-                                        self.farmland[k].board[i][j].water()
+                    self.grid.MouseClicked()
 
                 # This is done to get a click instead of a press
                 elif pygame.mouse.get_pressed()[0] and not self.shop.isBuying:
@@ -136,9 +112,19 @@ class main:
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-            #test.drawChicken()
-            #test.chickenWalk()
-            #test.eatGrass()
+            # test.drawChicken()
+            # test.chickenWalk()
+            # test.eatGrass()
+            self.Player.setScaleRatioFemale(2)
+            Player.DrawCharacter(self.Player,
+                                 self.screen,
+                                 self.Player.getScaledUpCharacter(self.Player.female, self.Player.getScaleRatioFemale())
+                                 , self.Player.startingPos,
+                                 self.Player.getWestCoordCropping(self.Player.getScaleRatioFemale(), self.Player.west),
+                                 self.Player.getNorthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
+                                 self.Player.getEastCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
+                                 self.Player.getSouthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
+
             self.shop.draw()
 
             self.grid.draw()
