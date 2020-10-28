@@ -1,11 +1,11 @@
 import pygame
 import numpy as np
+from Grid import Grid
 from Board import Board
 from Chicken import Chicken
 from Shop import Shop
 from Node import Node
-from Grid import Grid
-from astar import astar
+from Astar import Astar
 from GameObject import GameObject
 import random
 from Player import Player
@@ -35,20 +35,20 @@ class main:
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
 
-        self.farmarray = [[64, 64, 3, 3],
-                          [320, 64, 3, 7],
-                          [64, 320, 3, 3]]
-        self.farmland = np.ndarray(shape=(len(self.farmarray)), dtype=Board)
+        self.farmarray = [[1, 1, 3, 3],
+                          [1, 5, 3, 3],
+                          [5, 1, 3, 7]]
         # Makes the self.farmlands with the above positions and self.sizes
+
+        self.farmland = np.ndarray(shape=(len(self.farmarray)), dtype=Board)
         for i in range(len(self.farmarray)):
-            # print(i)
             self.farmland[i] = Board(self.farmarray[i][0], self.farmarray[i][1], self.farmarray[i][2],
                                      self.farmarray[i][3], self, self.grid, i)
 
         test = Chicken(self.screen, self.farmland[1], self)
-        shop = Shop(self)
-        self.astar = astar()
-        Agrid = astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY, self)
+        self.shop = Shop(self)
+        self.astar = Astar()
+        Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY, self)
         for i in range(len(Agrid)):
             for j in range(len(Agrid)):
                 node = Agrid[i][j]
@@ -78,16 +78,16 @@ class main:
                     print(self.Player.translateMousePosToGridPos())
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
-                Shop.clickAndDrag(shop)
+                Shop.clickAndDrag(self.shop)
+                mousePos = pygame.mouse.get_pos()
                 if not pygame.mouse.get_pressed()[0] and mousePressed:
                     mousePressed = False
-                    mousePos = pygame.mouse.get_pos()
 
                     # Runs trough all the tiles
                     self.grid.MouseClicked()
 
                 # This is done to get a click instead of a press
-                elif pygame.mouse.get_pressed()[0] and not shop.isBuying:
+                elif pygame.mouse.get_pressed()[0] and not self.shop.isBuying:
                     mousePressed = True
             # Main Event loop end
 

@@ -99,11 +99,11 @@ class Shop:
                 for k in range(len(self.main.farmarray)):
                     for i in range(self.main.farmarray[k][2]):
                         for j in range(self.main.farmarray[k][3]):
-                            if self.main.farmarray[k][0] + (i * 70) <= mousePosition[0] \
-                                    <= self.main.farmarray[k][0] + (i * 70) + 64 \
-                                    and self.main.farmarray[k][1] + (j * 70) <= mousePosition[1] \
-                                    <= self.main.farmarray[k][1] + (
-                                    j * 70) + 64:
+                            if (self.main.farmarray[k][0] * 64) + (i * 64) <= mousePosition[0] <= (self.main.farmarray[k][0] * 64) + (
+                                    i * 64) + 64 \
+                                    and (64 * self.main.farmarray[k][1]) + (j * 64) <= mousePosition[1] <= (
+                                    64 * self.main.farmarray[k][1]) + (
+                                    j * 64) + 64:
                                 if self.buying == "Sprinkler":
                                     print("Buy")
                                     self.buySprinkler(self.main.farmland[k].board[i][j], k)
@@ -119,7 +119,9 @@ class Shop:
             if self.main.coins >= 10 and not self.sprinklerCount == 4:
                 for i in range(len(self.main.sprinklerArray)):
                     if self.main.sprinklerArray[i] is None:
-                        self.main.sprinklerArray[i] = Sprinkler(self.main.farmland[k], farmland, self.main)
+
+                        #Needs position
+                        self.main.sprinklerArray[i] = Sprinkler(farmland.getGridPos()[0], farmland.getGridPos()[1], self.main, self.main.farmland[k], farmland)
                         self.main.sprinklerArray[i].gadgetInitiate()
                         self.sprinklerCount += 1
                         self.main.coins -= 10

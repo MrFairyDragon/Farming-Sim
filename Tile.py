@@ -1,7 +1,6 @@
 import math
 import pygame
 import random
-
 from GameObject import GameObject
 
 
@@ -10,17 +9,19 @@ def rescale(X, A, B, C, D):
     return int(round(newValue))
 
 
-class Tile:
+class Tile(GameObject):
 
-    def __init__(self, posX, posY, gridX, gridY, name, main, farmindex):
+    def __init__(self, gridPosX, gridPosY, main, name, farmindex, boardPosX, boardPosY):
+        super().__init__(gridPosX, gridPosY, main)
+        print(f'GridposX = {gridPosX}', f'GridposY = {gridPosY}')
+        self.posX = GameObject.getPos(self)[0]
+        self.posY = GameObject.getPos(self)[1]
+        self.boardPosX = boardPosX
+        self.boardPosY = boardPosY
         self.__sizeX = 64
         self.__sizeY = 64
-        self.__posX = posX
-        self.__posY = posY
-        self.defaultPosX = posX
-        self.defaultPosY = posY
-        self.__gridX = gridX
-        self.__gridY = gridY
+        self.defaultPosX = self.posX
+        self.defaultPosY = self.posY
         self.farmindex = farmindex
 
         self.__degree = -360
@@ -43,29 +44,29 @@ class Tile:
         self.isHardLocked = True
 
     def drawRect(self, color):
-        pygame.draw.rect(self.main.screen, color, [self.__posX, self.__posY, self.__sizeX, self.__sizeY])
+        pygame.draw.rect(self.main.screen, color, [self.posX, self.posY, self.__sizeX, self.__sizeY])
 
-    def drawTile(self, index, backgroundImg, foregroundImg ):
+    def drawTile(self, index, backgroundImg, foregroundImg):
         grassImg = pygame.image.load(backgroundImg)
         grassImg = pygame.transform.scale(grassImg, [int(self.__sizeX), int(self.__sizeY)])
         carrotImg = pygame.image.load(foregroundImg)
         carrotImg = pygame.transform.scale(carrotImg, [int(self.__sizeX), int(self.__sizeY)])
-        self.main.screen.blit(grassImg, (self.__posX, self.__posY))
+        self.main.screen.blit(grassImg, (self.posX, self.posY))
 
         if index == 0:
             return
         elif index == 1:
             carrotImgChop = pygame.transform.chop(carrotImg, (0, 0, 0, rescale(self.growTimer, 0, self.time, 0, 64)))
-            self.main.screen.blit(carrotImgChop, (self.__posX, (self.__posY + rescale(self.growTimer, 0, self.time,
+            self.main.screen.blit(carrotImgChop, (self.posX, (self.posY + rescale(self.growTimer, 0, self.time,
                                                                                       0, 64))))
         elif index == 2:
-            self.main.screen.blit(carrotImg, (self.__posX, self.__posY))
+            self.main.screen.blit(carrotImg, (self.posX, self.posY))
 
     def addText(self, text, textColor):
         font = pygame.font.Font('Fonts/COMIC.TTF', 20)
         text = font.render(text, True, textColor, None)
         textRect = text.get_rect()
-        textRect.center = (self.__posX + (self.__sizeX / 2), self.__posY + (self.__sizeY / 2))
+        textRect.center = (self.posX + (self.__sizeX / 2), self.posY + (self.__sizeY / 2))
         self.main.screen.blit(text, textRect)
 
     # Draws the tile different depending on it's state
@@ -100,16 +101,16 @@ class Tile:
         if self.animating:
             # Makes the square bigger and the back to original size
             if 0 <= self.__degree < 360:
-                self.__posX += -math.sin(math.radians(self.__degree)) * scale
-                self.__posY += -math.sin(math.radians(self.__degree)) * scale
+                self.posX += -math.sin(math.radians(self.__degree)) * scale
+                self.posY += -math.sin(math.radians(self.__degree)) * scale
                 self.__sizeX += math.sin(math.radians(self.__degree)) * 2 * scale
                 self.__sizeY += math.sin(math.radians(self.__degree)) * 2 * scale
                 self.__degree += speed
 
             # Makes the square smaller and then back to original size
             elif -360 <= self.__degree < 0:
-                self.__posX += -math.sin(math.radians(self.__degree) - math.pi) * scale
-                self.__posY += -math.sin(math.radians(self.__degree) - math.pi) * scale
+                self.posX += -math.sin(math.radians(self.__degree) - math.pi) * scale
+                self.posY += -math.sin(math.radians(self.__degree) - math.pi) * scale
                 self.__sizeX += math.sin(math.radians(self.__degree) - math.pi) * 2 * scale
                 self.__sizeY += math.sin(math.radians(self.__degree) - math.pi) * 2 * scale
                 self.__degree += speed
@@ -118,8 +119,8 @@ class Tile:
                 self.animating = False
                 self.__sizeX = 64
                 self.__sizeY = 64
-                self.__posX = self.defaultPosX
-                self.__posY = self.defaultPosY
+                self.posX = self.defaultPosX
+                self.posY = self.defaultPosY
                 self.__degree = -360
 
     # Animation Shake
@@ -128,26 +129,26 @@ class Tile:
         # Makes the square move in all directions (NV, NE, SV, SE)
         if self.isShaking:
             if 0 <= self.__angle < 360:
-                self.__posX += math.sin(math.radians(self.__angle)) * scale
-                self.__posY += math.sin(math.radians(self.__angle)) * scale
+                self.posX += math.sin(math.radians(self.__angle)) * scale
+                self.posY += math.sin(math.radians(self.__angle)) * scale
                 self.__angle += speed
             elif -360 <= self.__angle < 0:
-                self.__posX -= math.sin(math.radians(self.__angle)) * scale
-                self.__posY += math.sin(math.radians(self.__angle)) * scale
+                self.posX -= math.sin(math.radians(self.__angle)) * scale
+                self.posY += math.sin(math.radians(self.__angle)) * scale
                 self.__angle += speed
             elif -720 <= self.__angle < -360:
-                self.__posX += math.sin(math.radians(self.__angle)) * scale
-                self.__posY -= math.sin(math.radians(self.__angle)) * scale
+                self.posX += math.sin(math.radians(self.__angle)) * scale
+                self.posY -= math.sin(math.radians(self.__angle)) * scale
                 self.__angle += speed
             elif 360 <= self.__angle < 720:
-                self.__posX -= math.sin(math.radians(self.__angle)) * scale
-                self.__posY -= math.sin(math.radians(self.__angle)) * scale
+                self.posX -= math.sin(math.radians(self.__angle)) * scale
+                self.posY -= math.sin(math.radians(self.__angle)) * scale
                 self.__angle += speed
 
             # Once done 2 times it stops (Change the shake count to more then 2 for more shaking)
             elif self.shakeCount == 2:
-                self.__posX = self.defaultPosX
-                self.__posY = self.defaultPosY
+                self.posX = self.defaultPosX
+                self.posY = self.defaultPosY
                 self.__angle = -720
                 self.shakeCount = 0
                 self.isShaking = False
@@ -158,7 +159,10 @@ class Tile:
                 self.shakeCount += 1
 
     def getGridIndexes(self) -> []:
-        return [self.__gridX, self.__gridY]
+        return [self.boardPosX, self.boardPosY]
+
+    def getGridPos(self):
+        return self.gridPosX, self.gridPosY
 
     def hardUnlock(self):
         self.main.coins -= self.main.farmlandbuy
