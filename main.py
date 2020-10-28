@@ -1,11 +1,11 @@
 import pygame
 import numpy as np
+from Grid import Grid
 from Board import Board
 from Chicken import Chicken
 from Shop import Shop
 from Node import Node
-from Grid import Grid
-from astar import astar
+from Astar import Astar
 from GameObject import GameObject
 import random
 
@@ -35,26 +35,26 @@ class main:
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
 
-        self.farmarray = [[64, 64, 3, 3],
-                          [320, 64, 3, 7],
-                          [64, 320, 3, 3]]
-        self.farmland = np.ndarray(shape=(len(self.farmarray)), dtype=Board)
+        self.farmarray = [[1, 1, 3, 3],
+                          [1, 5, 3, 3],
+                          [5, 1, 3, 7]]
         # Makes the self.farmlands with the above positions and self.sizes
+
+        self.farmland = np.ndarray(shape=(len(self.farmarray)), dtype=Board)
         for i in range(len(self.farmarray)):
-            print(i)
             self.farmland[i] = Board(self.farmarray[i][0], self.farmarray[i][1], self.farmarray[i][2],
                                      self.farmarray[i][3], self, self.grid, i)
 
         test = Chicken(self.screen, self.farmland[1], self)
-        shop = Shop(self)
-        self.astar = astar()
-        Agrid = astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY, self)
+        self.shop = Shop(self)
+        self.astar = Astar()
+        Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY, self)
         for i in range(len(Agrid)):
             for j in range(len(Agrid)):
                 node = Agrid[i][j]
                 print(Agrid[i][j])
                 node.update_neighbors(Agrid)
-        astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[2][2])
+        Astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[2][2])
 
 
 
@@ -76,10 +76,10 @@ class main:
                     carryOn = False
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
-                Shop.clickAndDrag(shop)
+                Shop.clickAndDrag(self.shop)
+                mousePos = pygame.mouse.get_pos()
                 if not pygame.mouse.get_pressed()[0] and mousePressed:
                     mousePressed = False
-                    mousePos = pygame.mouse.get_pos()
 
                     # Runs trough all the tiles
                     for k in range(len(self.farmarray)):
@@ -87,11 +87,10 @@ class main:
                             for j in range(self.farmarray[k][3]):
 
                                 # Mouse clicks on tile
-                                if self.farmarray[k][0] + (i * 70) <= mousePos[0] <= self.farmarray[k][0] + (
-                                        i * 70) + 64 \
-                                        and self.farmarray[k][1] + (j * 70) <= mousePos[1] <= self.farmarray[k][1] + (
-                                        j * 70) + 64:
-
+                                if (self.farmarray[k][0]*64) + (i * 64) <= mousePos[0] <= (self.farmarray[k][0]*64) + (
+                                        i * 64) + 64 \
+                                        and (64*self.farmarray[k][1]) + (j * 64) <= mousePos[1] <= (64*self.farmarray[k][1]) + (
+                                        j * 64) + 64:
                                     self.farmland[k].board[i][j].animating = True
 
                                     # Tile is hard locked
@@ -112,7 +111,7 @@ class main:
                                         self.farmland[k].board[i][j].water()
 
                 # This is done to get a click instead of a press
-                elif pygame.mouse.get_pressed()[0] and not shop.isBuying:
+                elif pygame.mouse.get_pressed()[0] and not self.shop.isBuying:
                     mousePressed = True
             # Main Event loop end
 
@@ -137,10 +136,10 @@ class main:
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-            test.drawChicken()
-            test.chickenWalk()
-            test.eatGrass()
-            shop.draw()
+            #test.drawChicken()
+            #test.chickenWalk()
+            #test.eatGrass()
+            self.shop.draw()
 
             self.grid.draw()
 

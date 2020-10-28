@@ -4,8 +4,8 @@ from FarmGadget import FarmGadget
 class Sprinkler(FarmGadget):
     neighbouringTiles = []
 
-    def __init__(self, farmBoard, farmTile, main):
-        super().__init__(farmBoard, farmTile, main)
+    def __init__(self, gridPosX, gridPosY, main, farmBoard, farmTile):
+        super().__init__(gridPosX, gridPosY, main, farmBoard, farmTile)
 
     def gadgetInitiate(self):
         self.neighbouringTiles = []
