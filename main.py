@@ -21,7 +21,7 @@ class main:
         self.tilebuy = 1
         self.farmlandbuy = 20
         self.sprinklerArray = [None, None, None, None, None]
-        self.Player = Player(self)
+        self.Player = Player(self, (375, 130))
         self.size = (800, 576)
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Farming simulator")
@@ -78,21 +78,9 @@ class main:
                 if event.type == pygame.QUIT:
                     carryOn = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.Player.getCounter2()
-                    print(self.Player.getMousePos()[-1])
-                    self.Player.getMousePosOnClick()
-                    self.Player.MovementQueue()
-                    # self.Player.setPreviousMovement()
-                    path = Astar.algorithm(self.astar, Agrid,
-                                           Agrid[1]
-                                                [1],
-                                           Agrid[self.Player.translateMousePosToGridPos()[0]]
-                                                [self.Player.translateMousePosToGridPos()[1]])
-
-                    for i in range(len(path)):
-                        pos = path[i].get_pos()
-                        print(pos)
-                    # print(self.Player.translateMousePosToGridPos())
+                    Astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[self.Player.translateMousePosToGridPos()[0]]
+                                                                         [self.Player.translateMousePosToGridPos()[1]])
+                    print(self.Player.translateMousePosToGridPos())
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
                 Shop.clickAndDrag(self.shop)
@@ -128,7 +116,7 @@ class main:
             Player.DrawCharacter(self.Player,
                                  self.screen,
                                  self.Player.getScaledUpCharacter(self.Player.female, self.Player.getScaleRatioFemale())
-                                 , self.Player.MovementSubscription(375, 130),
+                                 , self.Player.startingPos,
                                  self.Player.getWestCoordCropping(self.Player.getScaleRatioFemale(), self.Player.west),
                                  self.Player.getNorthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
                                  self.Player.getEastCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),

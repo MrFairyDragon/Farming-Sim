@@ -18,7 +18,7 @@ class Astar:
             path.append(current)
             current = came_from[current]
             current.make_path()
-        return path
+        print(path)
 
     def algorithm(self, grid, start, end):
         count = 0
@@ -42,7 +42,7 @@ class Astar:
             if current == end:
                 self.reconstructPath(came_from, end)
                 end.make_end()
-                return self.reconstructPath(came_from, end)
+                return True
 
             for neighbor in current.neighbors:
                 temp_g_score = g_score[current] + 1
