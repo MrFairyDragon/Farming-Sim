@@ -4,6 +4,7 @@ from Grid import Grid
 from Board import Board
 from Chicken import Chicken
 from Shop import Shop
+from Cow import Cow
 from Node import Node
 from Astar import Astar
 from GameObject import GameObject
@@ -30,7 +31,7 @@ class main:
         self.counter = 0
         self.skyImg = pygame.image.load('Assets/Sky_Skrr.png')
         self.isTrue = True
-        self.grid = Grid(self, 10, 12)
+        self.grid = Grid(self, 11, 10)
         self.Player.setIndexCounter(0)
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
@@ -45,12 +46,16 @@ class main:
             self.farmland[i] = Board(self.farmarray[i][0], self.farmarray[i][1], self.farmarray[i][2],
                                      self.farmarray[i][3], self, self.grid, i)
 
-        test = Chicken(self.screen, self.farmland[1], self)
-        self.shop = Shop(self)
+        self.test = Chicken(1, 5, self, self.farmland[1])
+        self.test2 = Cow(5, 1, self, self.farmland[2])
         self.astar = Astar()
-        Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY, self)
+        self.shop = Shop(self)
+
+        Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
+
         for i in range(len(Agrid)):
-            for j in range(len(Agrid)):
+            for j in range(len(Agrid[0])):
+                print (Agrid[i][j])
                 node = Agrid[i][j]
                 print(Agrid[i][j])
                 node.update_neighbors(Agrid)
@@ -94,23 +99,13 @@ class main:
                 mousePos = pygame.mouse.get_pos()
                 if not pygame.mouse.get_pressed()[0] and mousePressed:
                     mousePressed = False
-
-                    # Runs trough all the tiles
                     self.grid.MouseClicked()
-
-                # This is done to get a click instead of a press
                 elif pygame.mouse.get_pressed()[0] and not self.shop.isBuying:
                     mousePressed = True
             # Main Event loop end
 
             # This is the main loop the difference between this loop and the main event loop is that the other loop
             # only runs when a event is called (mouse movement, keys pressed, mouse clicked)
-
-            # Runs trough all tiles
-            for k in range(len(self.farmarray)):
-                for i in range(self.farmarray[k][2]):
-                    for j in range(self.farmarray[k][3]):
-                        self.farmland[k].board[i][j].grow()
 
             # Draws everything on the screen
             self.BackgroundScroll()
@@ -119,14 +114,16 @@ class main:
             for k in range(len(self.farmarray)):
                 for i in range(self.farmarray[k][2]):
                     for j in range(self.farmarray[k][3]):
+                        self.farmland[k].board[i][j].grow()
                         self.farmland[k].board[i][j].draw()
 
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-            # test.drawChicken()
-            # test.chickenWalk()
-            # test.eatGrass()
+
+            self.test.chickenWalk()
+            self.test2.chickenWalk()
+
             self.Player.setScaleRatioFemale(2)
             Player.DrawCharacter(self.Player,
                                  self.screen,
@@ -137,12 +134,9 @@ class main:
                                  self.Player.getEastCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
                                  self.Player.getSouthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
 
-            self.shop.draw()
-
             self.grid.draw()
-
+            self.shop.draw()
             pygame.display.flip()
-
             self.clock.tick(60)
 
         pygame.quit()

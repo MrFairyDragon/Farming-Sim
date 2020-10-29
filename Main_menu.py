@@ -10,6 +10,7 @@ def StartTheGame():
 class Main_menu:
 
     def __init__(self):
+        pygame.init()
         self.size = (800, 600)
         self.__screen = pygame.display.set_mode(self.size)
         self.__isInMenu = True
