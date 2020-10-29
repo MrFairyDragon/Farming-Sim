@@ -60,12 +60,12 @@ class Astar:
                 current.make_closed()
         return False;
 
-    def make_grid(self, sizeX, sizeY, main):
+    def make_grid(self, sizeX, sizeY):
         grid = []
         gap = 64
         for i in range(sizeX):
             grid.append([])
             for j in range(sizeY):
-                node = Node(i, j, gap, main.grid.sizeX, main.grid.sizeY)
+                node = Node(i, j, gap, sizeX, sizeY)
                 grid[i].append(node)
         return grid

@@ -1,14 +1,12 @@
-from Chicken import Chicken
 import pygame
 from Sprinkler import Sprinkler
-from Grid import Grid
 
 
 class Shop:
 
     def __init__(self, main):
         self.main = main
-        self.__posX = (self.main.grid.sizeX + 1) * 64
+        self.__posX = self.main.grid.sizeX * 64
         self.__posY = 0
         self.__posOffset = 16
         self.__sizeX = self.main.size[0] -96
@@ -17,12 +15,11 @@ class Shop:
         self.isBuying = False
         self.sprinklerCount = 0
 
-        self.chickenImg = pygame.image.load('Assets/Choiken.gif')
+        self.chickenImg = pygame.image.load('Assets/Chicken.png')
         self.sprinklerImg = pygame.image.load('Assets/Sprinkler.png')
         self.grassImg = pygame.image.load('Assets/Grass/Grass01.png')
 
     def draw(self):
-        self.main.screen
         pygame.draw.rect(self.main.screen, [192, 192, 192], [self.__posX, self.__posY, self.__sizeX, self.__sizeY])
 
         # Chicken
@@ -102,8 +99,7 @@ class Shop:
                             if (self.main.farmarray[k][0] * 64) + (i * 64) <= mousePosition[0] <= (self.main.farmarray[k][0] * 64) + (
                                     i * 64) + 64 \
                                     and (64 * self.main.farmarray[k][1]) + (j * 64) <= mousePosition[1] <= (
-                                    64 * self.main.farmarray[k][1]) + (
-                                    j * 64) + 64:
+                                    64 * self.main.farmarray[k][1]) + (j * 64) + 64:
                                 if self.buying == "Sprinkler":
                                     print("Buy")
                                     self.buySprinkler(self.main.farmland[k].board[i][j], k)
