@@ -1,14 +1,15 @@
 import pygame
 import numpy as np
+from Astar import Astar
 
 
 class Player:
-    def DrawCharacter(self, screen, img, pos,
+    def DrawCharacter(self, screen, img, pos, getMovement,
                       sprite_sheetCroppingW,
                       sprite_sheetCroppingN,
                       sprite_sheetCroppingE,
                       sprite_sheetCroppingS):
-        self.RenderAnimation(screen, img, pos,
+        self.RenderAnimation(screen, img, pos, getMovement,
                              sprite_sheetCroppingW,
                              sprite_sheetCroppingN,
                              sprite_sheetCroppingE,
@@ -17,57 +18,80 @@ class Player:
     def getMousePos(self):
         self.mx, self.my = pygame.mouse.get_pos()
         self.previousMovement.append((self.mx, self.my))
-        return self.previousMovement[-1]
+        return self.previousMovement
+
+    def setCounter2(self):
+        self.__counter2 += 1
+        print(self.__counter2)
+
+    def setPos(self, a, b):
+        self.startingPos = (a, b)
+        if self.__counter2 == 0:
+            return self.startingPos
+
+    def getMove2(self):
+        ans = []
+        ans2 = []
+        for i in range(len(self.getMove())):
+            for j in range(2):
+                ans.append(self.getMove()[i][0][j])
+        okay = np.asarray(ans)
+        okay2 = okay * 64
+        # print(okay2)
+        for n in range(1, len(okay2)):
+            ans2.append((okay2[n-1], okay2[n]))
+        ans3 = ans2[::2]
+        ans3.reverse()
+        return ans3
+        # print(ans3)
+
+    def getMovement(self):
+        path = Astar.algorithm(self.main.astar, self.main.Agrid,
+                               self.main.Agrid[1]
+                                              [1],
+                               self.main.Agrid[self.translateMousePosToGridPos()[0]]
+                                              [self.translateMousePosToGridPos()[1]])
+        ans = []
+        for i in range(len(path)):
+            ans.append([])
+            pos = path[i].get_pos()
+            for j in range(1):
+                ans[i].append(pos)
+        return ans
+
+    def getMove(self):
+        return self.__move
+
+    def setMove(self, a):
+        self.__move = a
 
     def translateMousePosToGridPos(self):
-        ans = [round(self.getMousePos()[0] / 64), round(self.getMousePos()[1] / 64)]
-        return ans
+        ans = [int(self.getMousePos()[-1][0] / 64), int(self.getMousePos()[-1][1] / 64)]
+        if ans[0] <= 10:
+            return ans
+        else:
+            ans2 = [10, int(self.getMousePos()[-1][1] / 64)]
+            return ans2
+
+    def MovementQueue(self):
+        self.__movement.append(self.getMousePos())
+        if self.__counter2 <= 1:
+            return [1, 1]
+        if self.__counter2 >= 2:
+            return self.__movement[-2][0]
 
     def getScaledUpCharacter(self, img, scaleRatio):
         self.ScaleUp = pygame.transform.scale(img, (img.get_width() * scaleRatio, img.get_height() * scaleRatio))
         return self.ScaleUp
 
-    def getWestCoordCropping(self, scaleRatio, westCoordinates):
+    def getCoordCropping(self, scaleRatio, direction):
         list1 = []
         list4 = []
-        for i in range(len(self.west)):
-            list1.append(list(westCoordinates[i]))
+        for i in range(len(direction)):
+            list1.append(list(direction[i]))
         list2 = np.array(list1)
         list3 = list2 * scaleRatio
-        for j in range(len(self.west)):
-            list4.append(tuple(list3[j]))
-        return list4
-
-    def getNorthCoordCropping(self, scaleRatio, northCoordinates):
-        list1 = []
-        list4 = []
-        for i in range(len(self.north)):
-            list1.append(list(northCoordinates[i]))
-        list2 = np.array(list1)
-        list3 = list2 * scaleRatio
-        for j in range(len(self.north)):
-            list4.append(tuple(list3[j]))
-        return list4
-
-    def getEastCoordCropping(self, scaleRatio, eastCoordinates):
-        list1 = []
-        list4 = []
-        for i in range(len(self.east)):
-            list1.append(list(eastCoordinates[i]))
-        list2 = np.array(list1)
-        list3 = list2 * scaleRatio
-        for j in range(len(self.east)):
-            list4.append(tuple(list3[j]))
-        return list4
-
-    def getSouthCoordCropping(self, scaleRatio, southCoordinates):
-        list1 = []
-        list4 = []
-        for i in range(len(self.south)):
-            list1.append(list(southCoordinates[i]))
-        list2 = np.array(list1)
-        list3 = list2 * scaleRatio
-        for j in range(len(self.south)):
+        for j in range(len(direction)):
             list4.append(tuple(list3[j]))
         return list4
 
@@ -83,22 +107,25 @@ class Player:
     def movement(self):
         pass
 
-    def RenderAnimation(self, screen, img, posTup,
+    def RenderAnimation(self, screen, img, posTup, getMovement,
                         sprite_sheetCroppingW,
                         sprite_sheetCroppingN,
                         sprite_sheetCroppingE,
                         sprite_sheetCroppingS):
         t1 = pygame.time.get_ticks()
         dt = t1 - self.t0
-        screen.blit(img, posTup, sprite_sheetCroppingW[self.__indexCount])
+        if self.__counter2 == 0:
+            screen.blit(img, posTup, sprite_sheetCroppingW[self.__indexCount])
+        if self.__counter2 >= 1:
+            for i in range(len(getMovement)):
+                screen.blit(img, getMovement[i], sprite_sheetCroppingW[self.__indexCount])
         if dt >= 200:
-            # astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[2][2])
             self.__indexCount += 1
             if self.__indexCount == len(sprite_sheetCroppingW):
                 self.__indexCount = 0
             self.t0 = t1
 
-    def __init__(self, main, startingPos):
+    def __init__(self, main):
         self.main = main
         self.female = pygame.image.load('Assets/Pepper_publish.png')
         self.__scaleRatioFemale = None
@@ -108,7 +135,10 @@ class Player:
         self.mx = None
         self.my = None
         self.previousMovement = []
-        self.startingPos = startingPos
+        self.startingPos = (375, 130)
+        self.__counter2 = 0
+        self.__move = []
+        self.__movement = []
 
         self.west = [(6, 100, 12, 28),
                      (30, 99, 12, 29),

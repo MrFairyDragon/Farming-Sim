@@ -21,7 +21,7 @@ class main:
         self.tilebuy = 1
         self.farmlandbuy = 20
         self.sprinklerArray = [None, None, None, None, None]
-        self.Player = Player(self, (375, 130))
+        self.Player = Player(self)
         self.size = (800, 576)
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Farming simulator")
@@ -32,6 +32,9 @@ class main:
         self.skyImg = pygame.image.load('Assets/Sky_Skrr.png')
         self.isTrue = True
         self.grid = Grid(self, 11, 10)
+        self.astar = Astar()
+        self.Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
+
         self.Player.setIndexCounter(0)
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
@@ -48,17 +51,16 @@ class main:
 
         self.test = Chicken(1, 5, self, self.farmland[1])
         self.test2 = Cow(5, 1, self, self.farmland[2])
-        self.astar = Astar()
         self.shop = Shop(self)
 
-        Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
+        # Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
 
-        for i in range(len(Agrid)):
-            for j in range(len(Agrid[0])):
-                print (Agrid[i][j])
-                node = Agrid[i][j]
-                print(Agrid[i][j])
-                node.update_neighbors(Agrid)
+        for i in range(len(self.Agrid)):
+            for j in range(len(self.Agrid[0])):
+                print (self.Agrid[i][j])
+                node = self.Agrid[i][j]
+                print(self.Agrid[i][j])
+                node.update_neighbors(self.Agrid)
                 # astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[9][9])
 
         # Unlocks the first self.farmland and the first tile in the self.farmland
@@ -78,9 +80,14 @@ class main:
                 if event.type == pygame.QUIT:
                     carryOn = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    Astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[self.Player.translateMousePosToGridPos()[0]]
-                                                                         [self.Player.translateMousePosToGridPos()[1]])
-                    print(self.Player.translateMousePosToGridPos())
+                    # print(self.Player.translateMousePosToGridPos())
+                    print(self.Player.MovementQueue())
+                    self.Player.setCounter2()
+                    # print(self.Player.getMovement()[0][0][1])
+                    self.Player.setMove(self.Player.getMovement())
+                    self.Player.getMove2()
+                    # print(self.Player.getMove2())
+
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
                 Shop.clickAndDrag(self.shop)
@@ -111,16 +118,15 @@ class main:
 
             self.test.chickenWalk()
             self.test2.chickenWalk()
-
             self.Player.setScaleRatioFemale(2)
             Player.DrawCharacter(self.Player,
                                  self.screen,
                                  self.Player.getScaledUpCharacter(self.Player.female, self.Player.getScaleRatioFemale())
-                                 , self.Player.startingPos,
-                                 self.Player.getWestCoordCropping(self.Player.getScaleRatioFemale(), self.Player.west),
-                                 self.Player.getNorthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
-                                 self.Player.getEastCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
-                                 self.Player.getSouthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
+                                 , self.Player.setPos(300, 300), self.Player.getMove2(),
+                                 self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.west),
+                                 self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
+                                 self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
+                                 self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
 
             self.grid.draw()
             self.shop.draw()
