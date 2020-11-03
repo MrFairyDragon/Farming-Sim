@@ -16,18 +16,29 @@ class Player:
                              sprite_sheetCroppingS)
 
     def getMousePos(self):
+        ans = []
         self.mx, self.my = pygame.mouse.get_pos()
         self.previousMovement.append((self.mx, self.my))
         return self.previousMovement
 
     def setCounter2(self):
         self.__counter2 += 1
-        print(self.__counter2)
+        # print(self.__counter2)
+
+    def getCounter2(self):
+        return self.__counter2
 
     def setPos(self, a, b):
         self.startingPos = (a, b)
         if self.__counter2 == 0:
             return self.startingPos
+
+    def MovementQueue(self):
+        if self.getCounter2() <= 1:
+            self.previousMovement2.append([int(self.startingPos[0] / 64), int(self.startingPos[1] / 64)])
+            self.previousMovement2.append(self.translateMousePosToGridPos())
+        self.previousMovement2.append(self.translateMousePosToGridPos())
+        return self.previousMovement2[-3]
 
     def getMove2(self):
         ans = []
@@ -37,7 +48,6 @@ class Player:
                 ans.append(self.getMove()[i][0][j])
         okay = np.asarray(ans)
         okay2 = okay * 64
-        # print(okay2)
         for n in range(1, len(okay2)):
             ans2.append((okay2[n-1], okay2[n]))
         ans3 = ans2[::2]
@@ -47,8 +57,8 @@ class Player:
 
     def getMovement(self):
         path = Astar.algorithm(self.main.astar, self.main.Agrid,
-                               self.main.Agrid[1]
-                                              [1],
+                               self.main.Agrid[self.MovementQueue()[0]]
+                                              [self.MovementQueue()[1]],
                                self.main.Agrid[self.translateMousePosToGridPos()[0]]
                                               [self.translateMousePosToGridPos()[1]])
         ans = []
@@ -72,13 +82,6 @@ class Player:
         else:
             ans2 = [10, int(self.getMousePos()[-1][1] / 64)]
             return ans2
-
-    def MovementQueue(self):
-        self.__movement.append(self.getMousePos())
-        if self.__counter2 <= 1:
-            return [1, 1]
-        if self.__counter2 >= 2:
-            return self.__movement[-2][0]
 
     def getScaledUpCharacter(self, img, scaleRatio):
         self.ScaleUp = pygame.transform.scale(img, (img.get_width() * scaleRatio, img.get_height() * scaleRatio))
@@ -104,8 +107,18 @@ class Player:
     def setIndexCounter(self, index):
         self.__indexCount = index
 
-    def movement(self):
-        pass
+    def setSwitch(self, a):
+        self.__switch = a
+
+    def getSwitch(self):
+        return self.__switch
+
+    def setSwitch(self):
+        self.__switch = True
+        self.__indexCount2 = 0
+
+    def getIndexCount2(self):
+        return self.__indexCount2
 
     def RenderAnimation(self, screen, img, posTup, getMovement,
                         sprite_sheetCroppingW,
@@ -117,10 +130,16 @@ class Player:
         if self.__counter2 == 0:
             screen.blit(img, posTup, sprite_sheetCroppingW[self.__indexCount])
         if self.__counter2 >= 1:
-            for i in range(len(getMovement)):
-                screen.blit(img, getMovement[i], sprite_sheetCroppingW[self.__indexCount])
+            if self.__switch:
+                for i in range(len(getMovement)):
+                    screen.blit(img, getMovement[self.__indexCount2], sprite_sheetCroppingW[self.__indexCount])
+                if self.__indexCount2 == len(getMovement)-1:
+                    self.__switch = False
+            if not self.__switch:
+                screen.blit(img, getMovement[-1], sprite_sheetCroppingS[1])
         if dt >= 200:
             self.__indexCount += 1
+            self.__indexCount2 += 1
             if self.__indexCount == len(sprite_sheetCroppingW):
                 self.__indexCount = 0
             self.t0 = t1
@@ -135,10 +154,13 @@ class Player:
         self.mx = None
         self.my = None
         self.previousMovement = []
+        self.previousMovement2 = []
         self.startingPos = (375, 130)
         self.__counter2 = 0
         self.__move = []
-        self.__movement = []
+        self.__indexCount2 = 0
+        self.__switch = True
+        self.__Movement = 0
 
         self.west = [(6, 100, 12, 28),
                      (30, 99, 12, 29),

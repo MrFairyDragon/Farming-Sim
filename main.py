@@ -81,11 +81,14 @@ class main:
                     carryOn = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # print(self.Player.translateMousePosToGridPos())
-                    print(self.Player.MovementQueue())
                     self.Player.setCounter2()
+                    self.Player.setSwitch()
                     # print(self.Player.getMovement()[0][0][1])
                     self.Player.setMove(self.Player.getMovement())
                     self.Player.getMove2()
+                    # print(self.Player.MovementQueue(self.Player.getMousePos()))
+                    # print(self.Player.getMousePos())
+                    print(self.Player.MovementQueue())
                     # print(self.Player.getMove2())
 
 
@@ -101,11 +104,10 @@ class main:
 
             # This is the main loop the difference between this loop and the main event loop is that the other loop
             # only runs when a event is called (mouse movement, keys pressed, mouse clicked)
-
+            # print(self.Player.getIndexCount2())
             # Draws everything on the screen
             self.BackgroundScroll()
             self.screen.blit(text, textRect)
-
             for k in range(len(self.farmarray)):
                 for i in range(self.farmarray[k][2]):
                     for j in range(self.farmarray[k][3]):
@@ -115,7 +117,6 @@ class main:
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-
             self.test.chickenWalk()
             self.test2.chickenWalk()
             self.Player.setScaleRatioFemale(2)
@@ -127,7 +128,6 @@ class main:
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
-
             self.grid.draw()
             self.shop.draw()
             pygame.display.flip()
