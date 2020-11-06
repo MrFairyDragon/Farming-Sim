@@ -80,17 +80,11 @@ class main:
                 if event.type == pygame.QUIT:
                     carryOn = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    # print(self.Player.translateMousePosToGridPos())
                     self.Player.setCounter2()
                     self.Player.setSwitch()
-                    # print(self.Player.getMovement()[0][0][1])
                     self.Player.setMove(self.Player.getMovement())
                     self.Player.getMove2()
-                    # print(self.Player.MovementQueue(self.Player.getMousePos()))
-                    # print(self.Player.getMousePos())
-                    print(self.Player.MovementQueue())
-                    # print(self.Player.getMove2())
-
+                    self.Player.setMove2()
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
                 Shop.clickAndDrag(self.shop)
@@ -128,6 +122,7 @@ class main:
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
+
             self.grid.draw()
             self.shop.draw()
             pygame.display.flip()

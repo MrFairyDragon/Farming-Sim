@@ -15,15 +15,24 @@ class Player:
                              sprite_sheetCroppingE,
                              sprite_sheetCroppingS)
 
+    def setMove2(self):
+        self.__Movement.clear()
+        self.mx, self.my = pygame.mouse.get_pos()
+        self.__Movement.append((self.mx / 64, self.my / 64))
+        a = int(self.__Movement[0][0]) * 64
+        b = int(self.__Movement[0][1]) * 64
+        if self.mx > 64 * 10:
+            a = 64 * 10
+        self.__Movement = [(a, b)]
+
     def getMousePos(self):
-        ans = []
+        self.previousMovement.clear()
         self.mx, self.my = pygame.mouse.get_pos()
         self.previousMovement.append((self.mx, self.my))
         return self.previousMovement
 
     def setCounter2(self):
         self.__counter2 += 1
-        # print(self.__counter2)
 
     def getCounter2(self):
         return self.__counter2
@@ -49,18 +58,21 @@ class Player:
         okay = np.asarray(ans)
         okay2 = okay * 64
         for n in range(1, len(okay2)):
-            ans2.append((okay2[n-1], okay2[n]))
+            ans2.append((okay2[n - 1], okay2[n]))
         ans3 = ans2[::2]
         ans3.reverse()
-        return ans3
-        # print(ans3)
+        if len(ans3) == 0:
+            return self.__Movement
+        else:
+            return ans3
 
     def getMovement(self):
         path = Astar.algorithm(self.main.astar, self.main.Agrid,
                                self.main.Agrid[self.MovementQueue()[0]]
-                                              [self.MovementQueue()[1]],
+                               [self.MovementQueue()[1]],
                                self.main.Agrid[self.translateMousePosToGridPos()[0]]
-                                              [self.translateMousePosToGridPos()[1]])
+                               [self.translateMousePosToGridPos()[1]])
+
         ans = []
         for i in range(len(path)):
             ans.append([])
@@ -107,18 +119,35 @@ class Player:
     def setIndexCounter(self, index):
         self.__indexCount = index
 
-    def setSwitch(self, a):
-        self.__switch = a
-
     def getSwitch(self):
         return self.__switch
 
     def setSwitch(self):
         self.__switch = True
         self.__indexCount2 = 0
+        self.__indexCount3 = 0
 
     def getIndexCount2(self):
         return self.__indexCount2
+
+    def getLenMovement(self):
+        return len(self.getMove2())
+
+    def DetermineDirection(self, getMovement):
+        if self.getLenMovement() > 1:
+            self.__Direction.clear()
+            for i in range(1, self.getLenMovement()):
+                if getMovement[i][0] - getMovement[i - 1][0] >= 0:
+                    if getMovement[i][0] - getMovement[i - 1][0] == 0:
+                        if getMovement[i][1] - getMovement[i - 1][1] >= 0:
+                            self.__Direction.append("South")
+                        else:
+                            self.__Direction.append("North")
+                    else:
+                        self.__Direction.append("East")
+                else:
+                    self.__Direction.append("West")
+        return self.__Direction
 
     def RenderAnimation(self, screen, img, posTup, getMovement,
                         sprite_sheetCroppingW,
@@ -128,18 +157,31 @@ class Player:
         t1 = pygame.time.get_ticks()
         dt = t1 - self.t0
         if self.__counter2 == 0:
-            screen.blit(img, posTup, sprite_sheetCroppingW[self.__indexCount])
+            screen.blit(img, posTup, sprite_sheetCroppingS[1])
         if self.__counter2 >= 1:
+            if len(getMovement) == 1:
+                self.__switch = False
             if self.__switch:
-                for i in range(len(getMovement)):
+                if self.DetermineDirection(self.getMove2())[self.__indexCount3] == "South":
+                    screen.blit(img, getMovement[self.__indexCount2], sprite_sheetCroppingS[self.__indexCount])
+                if self.DetermineDirection(self.getMove2())[self.__indexCount3] == "North":
+                    screen.blit(img, getMovement[self.__indexCount2], sprite_sheetCroppingN[self.__indexCount])
+                if self.DetermineDirection(self.getMove2())[self.__indexCount3] == "East":
+                    screen.blit(img, getMovement[self.__indexCount2], sprite_sheetCroppingE[self.__indexCount])
+                if self.DetermineDirection(self.getMove2())[self.__indexCount3] == "West":
                     screen.blit(img, getMovement[self.__indexCount2], sprite_sheetCroppingW[self.__indexCount])
-                if self.__indexCount2 == len(getMovement)-1:
+                if self.__indexCount2 == len(getMovement) - 1:
                     self.__switch = False
             if not self.__switch:
                 screen.blit(img, getMovement[-1], sprite_sheetCroppingS[1])
+
         if dt >= 200:
             self.__indexCount += 1
-            self.__indexCount2 += 1
+            if self.__switch:
+                self.__indexCount2 += 1
+                self.__indexCount3 += 1
+            if self.__indexCount3 == len(self.DetermineDirection(self.getMove2())):
+                self.__indexCount3 = 0
             if self.__indexCount == len(sprite_sheetCroppingW):
                 self.__indexCount = 0
             self.t0 = t1
@@ -160,7 +202,9 @@ class Player:
         self.__move = []
         self.__indexCount2 = 0
         self.__switch = True
-        self.__Movement = 0
+        self.__Movement = []
+        self.__Direction = []
+        self.__indexCount3 = 0
 
         self.west = [(6, 100, 12, 28),
                      (30, 99, 12, 29),
