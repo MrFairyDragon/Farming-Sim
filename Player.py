@@ -20,7 +20,7 @@ class Player:
         return self.previousMovement[-1]
 
     def translateMousePosToGridPos(self):
-        ans = [round(self.getMousePos()[0] / 64), round(self.getMousePos()[1] / 64)]
+        ans = [int(self.getMousePos()[0] / 64), int(self.getMousePos()[1] / 64)]
         return ans
 
     def getScaledUpCharacter(self, img, scaleRatio):

@@ -31,7 +31,7 @@ class main:
         self.counter = 0
         self.skyImg = pygame.image.load('Assets/Sky_Skrr.png')
         self.isTrue = True
-        self.grid = Grid(self, 11, 10)
+        self.grid = Grid(self, 11, 9)
         self.Player.setIndexCounter(0)
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
@@ -109,8 +109,8 @@ class main:
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
 
-            self.test.chickenWalk()
-            self.test2.chickenWalk()
+            self.test.Walk()
+            self.test2.Walk()
 
             self.Player.setScaleRatioFemale(2)
             Player.DrawCharacter(self.Player,
