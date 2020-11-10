@@ -89,12 +89,11 @@ class main:
                     self.Player.setCounter2()
                     self.Player.setSwitch()
                     self.Player.setMove(self.Player.getMovement())
-                    self.Player.getMove2()
                     self.Player.setMove2()
+                    print(self.Player.DetermineDirection(self.Player.getMove2()))
 
                 # Is called whenever the mouse is pressed not whenever it's clicked
                 Shop.clickAndDrag(self.shop)
-                mousePos = pygame.mouse.get_pos()
                 if not pygame.mouse.get_pressed()[0] and mousePressed:
                     mousePressed = False
                     self.grid.MouseClicked()
