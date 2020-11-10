@@ -18,7 +18,6 @@ class Astar:
             path.append(current)
             current = came_from[current]
             current.make_path()
-        print(path)
         return path
 
     def algorithm(self, grid, start, end):
@@ -43,7 +42,6 @@ class Astar:
             if current == end:
                 self.reconstructPath(came_from, end)
                 end.make_end()
-                return True
                 return self.reconstructPath(came_from, end)
 
             for neighbor in current.neighbors:

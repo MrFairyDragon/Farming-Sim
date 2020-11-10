@@ -88,17 +88,12 @@ class Player:
         self.__move = a
 
     def translateMousePosToGridPos(self):
-<<<<<<< HEAD
-        ans = [int(self.getMousePos()[0] / 64), int(self.getMousePos()[1] / 64)]
-        return ans
-=======
         ans = [int(self.getMousePos()[-1][0] / 64), int(self.getMousePos()[-1][1] / 64)]
         if ans[0] <= 10:
             return ans
         else:
             ans2 = [10, int(self.getMousePos()[-1][1] / 64)]
             return ans2
->>>>>>> 0f50b53412d72650301fdebeda833bc2a8a4d856
 
     def getScaledUpCharacter(self, img, scaleRatio):
         self.ScaleUp = pygame.transform.scale(img, (img.get_width() * scaleRatio, img.get_height() * scaleRatio))

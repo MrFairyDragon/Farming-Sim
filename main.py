@@ -30,15 +30,10 @@ class main:
         self.counter = 0
         self.skyImg = pygame.image.load('Assets/Sky_Skrr.png')
         self.isTrue = True
-        <<<<<<< HEAD
-        self.grid = Grid(self, 11, 9)
-        =======
         self.grid = Grid(self, 11, 10)
         self.astar = Astar()
         self.Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
-
-        >>>>>>> 0f50b53412d72650301fdebeda833bc2a8a4d856
-        self.Player.setIndexCounter(0)
+        self.Player = Player(self)
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
 
@@ -91,9 +86,6 @@ class main:
                 if event.type == pygame.QUIT:
                     carryOn = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    Astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[self.Player.translateMousePosToGridPos()[0]]
-                                                                         [self.Player.translateMousePosToGridPos()[1]])
-                    print(self.Player.translateMousePosToGridPos())
                     self.Player.setCounter2()
                     self.Player.setSwitch()
                     self.Player.setMove(self.Player.getMovement())
@@ -127,24 +119,13 @@ class main:
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-<<<<<<< HEAD
 
             self.test.Walk()
             self.test2.Walk()
-
-=======
-            self.test.chickenWalk()
-            self.test2.chickenWalk()
->>>>>>> 0f50b53412d72650301fdebeda833bc2a8a4d856
             self.Player.setScaleRatioFemale(2)
             Player.DrawCharacter(self.Player,
                                  self.screen,
                                  self.Player.getScaledUpCharacter(self.Player.female, self.Player.getScaleRatioFemale())
-                                 , self.Player.startingPos,
-                                 self.Player.getWestCoordCropping(self.Player.getScaleRatioFemale(), self.Player.west),
-                                 self.Player.getNorthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
-                                 self.Player.getEastCoordCropping(self.Player.getScaleRatioFemale(), self.Player.east),
-                                 self.Player.getSouthCoordCropping(self.Player.getScaleRatioFemale(), self.Player.south))
                                  , self.Player.setPos(300, 300), self.Player.getMove2(),
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.west),
                                  self.Player.getCoordCropping(self.Player.getScaleRatioFemale(), self.Player.north),
