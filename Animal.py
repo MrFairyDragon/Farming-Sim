@@ -13,17 +13,17 @@ class Animal(GameObject):
         self.myTile = farmland.board[0, 0]
 
 
-    chickenChillTime: int = 100
-    chickenChillTimer: int = 0
+    ChillTime: int = 100
+    ChillTimer: int = 0
     keepingTrackTimer: int = 0
 
     myLand: Board = None
     myTile: Tile = None
 
 
-    def chickenWalk(self):
-        self.chickenChillTimer += random.randint(1, 4)
-        if self.chickenChillTimer > self.chickenChillTime:
+    def Walk(self):
+        self.ChillTimer += random.randint(1, 4)
+        if self.ChillTimer > self.ChillTime:
             self.myTile.isOccupied = False
             self.myTile.name = "Carrot"
             myNewTile: Tile = self.myLand.getNextFreeTile(self.myTile.getGridIndexes())
@@ -31,7 +31,7 @@ class Animal(GameObject):
             self.myTile.name = self.getTexture()
             self.myTile.isOccupied = True
 
-            self.chickenChillTimer = 0
+            self.ChillTimer = 0
             self.eatGrass()
 
 

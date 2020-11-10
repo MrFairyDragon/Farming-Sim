@@ -21,7 +21,6 @@ class main:
         self.tilebuy = 1
         self.farmlandbuy = 20
         self.sprinklerArray = [None, None, None, None, None]
-        self.Player = Player(self)
         self.size = (800, 576)
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Farming simulator")
@@ -34,7 +33,7 @@ class main:
         self.grid = Grid(self, 11, 10)
         self.astar = Astar()
         self.Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
-
+        self.Player = Player(self)
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
 
@@ -50,10 +49,18 @@ class main:
 
         self.test = Chicken(1, 5, self, self.farmland[1])
         self.test2 = Cow(5, 1, self, self.farmland[2])
+        self.astar = Astar()
         self.shop = Shop(self)
 
+        Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
         # Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
 
+        for i in range(len(Agrid)):
+            for j in range(len(Agrid[0])):
+                print (Agrid[i][j])
+                node = Agrid[i][j]
+                print(Agrid[i][j])
+                node.update_neighbors(Agrid)
         for i in range(len(self.Agrid)):
             for j in range(len(self.Agrid[0])):
                 print (self.Agrid[i][j])
@@ -96,10 +103,12 @@ class main:
 
             # This is the main loop the difference between this loop and the main event loop is that the other loop
             # only runs when a event is called (mouse movement, keys pressed, mouse clicked)
+
             # print(self.Player.getIndexCount2())
             # Draws everything on the screen
             self.BackgroundScroll()
             self.screen.blit(text, textRect)
+
             for k in range(len(self.farmarray)):
                 for i in range(self.farmarray[k][2]):
                     for j in range(self.farmarray[k][3]):
@@ -109,8 +118,9 @@ class main:
             for i in range(len(self.sprinklerArray)):
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
-            self.test.chickenWalk()
-            self.test2.chickenWalk()
+
+            self.test.Walk()
+            self.test2.Walk()
             self.Player.setScaleRatioFemale(2)
             Player.DrawCharacter(self.Player,
                                  self.screen,
