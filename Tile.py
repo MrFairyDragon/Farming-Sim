@@ -13,7 +13,7 @@ class Tile(GameObject):
 
     def __init__(self, gridPosX, gridPosY, main, name, farmindex, boardPosX, boardPosY):
         super().__init__(gridPosX, gridPosY, main)
-        print(f'GridposX = {gridPosX}', f'GridposY = {gridPosY}')
+       # print(f'GridposX = {gridPosX}', f'GridposY = {gridPosY}')
         self.posX = GameObject.getPos(self)[0]
         self.posY = GameObject.getPos(self)[1]
         self.boardPosX = boardPosX

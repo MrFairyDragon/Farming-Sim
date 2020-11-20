@@ -1,5 +1,6 @@
 import numpy as np
 import pygame
+from network import network
 from GameObject import GameObject
 
 
@@ -17,6 +18,7 @@ class Grid:
 
     def MouseClicked(self):
         self.main.mousePos = pygame.mouse.get_pos()
+
         for k in range(len(self.main.farmarray)):
             for i in range(self.main.farmarray[k][2]):
                 for j in range(self.main.farmarray[k][3]):

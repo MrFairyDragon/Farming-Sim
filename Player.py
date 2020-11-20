@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 from Astar import Astar
+from network import network
 
 
 class Player:

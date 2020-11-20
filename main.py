@@ -5,8 +5,11 @@ from Board import Board
 from Chicken import Chicken
 from Shop import Shop
 from Cow import Cow
+from network import network
 from Node import Node
 from Astar import Astar
+from ClientSide import ClientSide
+from ServerSide import ServerSide
 from GameObject import GameObject
 import random
 from Player import Player
@@ -34,6 +37,11 @@ class main:
         self.astar = Astar()
         self.Agrid = Astar.make_grid(self.astar, self.grid.sizeX, self.grid.sizeY)
         self.Player = Player(self)
+        # self.Player2 = Player(self)
+        self.network = network()
+        self.Player2mousePos = self.network.getMousePos()
+        print(self.Player2mousePos)
+        self.Player2mouseIsPressed = False
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
         # self.sizeY)
 
@@ -57,15 +65,15 @@ class main:
 
         for i in range(len(Agrid)):
             for j in range(len(Agrid[0])):
-                print (Agrid[i][j])
+                # print (Agrid[i][j])
                 node = Agrid[i][j]
-                print(Agrid[i][j])
+                # print(Agrid[i][j])
                 node.update_neighbors(Agrid)
         for i in range(len(self.Agrid)):
             for j in range(len(self.Agrid[0])):
-                print (self.Agrid[i][j])
+                # print (self.Agrid[i][j])
                 node = self.Agrid[i][j]
-                print(self.Agrid[i][j])
+                # print(self.Agrid[i][j])
                 node.update_neighbors(self.Agrid)
                 # astar.algorithm(self.astar, Agrid, Agrid[1][1], Agrid[9][9])
 
@@ -108,6 +116,8 @@ class main:
             # Draws everything on the screen
             self.BackgroundScroll()
             self.screen.blit(text, textRect)
+            Player2mousePos = self.network.send(self.network.make_pos(pygame.mouse.get_pos()))
+            #print(self.Player2mousePos)
 
             for k in range(len(self.farmarray)):
                 for i in range(self.farmarray[k][2]):
