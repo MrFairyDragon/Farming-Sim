@@ -7,7 +7,7 @@ class NetPlayer:
 
     def __init__(self, main):
         self.main = main
-        self.female = pygame.image.load('Assets/Pepper_publish.png')
+        self.female = pygame.image.load('Assets/Pepper_publish_grey.png')
         self.__scaleRatioFemale = 2
         self.ScaleUp = pygame.transform.scale(self.female, (180, 128))
         self.__indexCount = 0
