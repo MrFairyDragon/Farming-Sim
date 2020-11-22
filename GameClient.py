@@ -18,7 +18,7 @@ class GameClient:
     def __init__(self):
         pygame.init()
         mousePressed = False
-        self.coins = 1000
+        self.coins = 5
         self.tilebuy = 1
         self.farmlandbuy = 20
         self.sprinklerArray = [None, None, None, None, None]
