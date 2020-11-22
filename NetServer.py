@@ -15,18 +15,15 @@ class NetServer:
         connection = None
         mousePos = (0, 0)
         clientPlayer = None
-        screen = None
 
         def __init__(self, main):
 
             self.clientPlayer = NetPlayer(main)
 
-            self.screen = main.screen
-
-        def DrawPlayer(self):
+        def DrawPlayer(self, screen):
 
 
-            self.clientPlayer.DrawCharacter(self.screen,
+            self.clientPlayer.DrawCharacter(screen,
                                             self.clientPlayer.getScaledUpCharacter(self.clientPlayer.female, self.clientPlayer.getScaleRatioFemale()),
                                             self.clientPlayer.setPos(300, 300),
                                             self.clientPlayer.getMove2(),
@@ -67,6 +64,10 @@ class NetServer:
 
             start_new_thread(self.thread, (connection, self.clientIDcounter))
             self.clientIDcounter += 1
+
+    def drawPlayers(self, screen):
+        for client in self.gameClients:
+            client.DrawPlayer(screen)
 
     def read_pos(self, string):
         string = str(string)

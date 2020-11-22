@@ -102,9 +102,7 @@ class GameServer:
                 if not self.sprinklerArray[i] == None:
                     self.sprinklerArray[i].gadgetActivate()
 
-            for client in self.server.gameClients:
-                #print("Tell the client to draw a character")
-                client.DrawPlayer()
+            self.server.drawPlayers(self.screen)
 
             self.grid.draw()
             self.shop.draw()
