@@ -4,7 +4,8 @@ from _thread import *
 import traceback
 import time
 from NetPlayer import NetPlayer
-
+import os
+import signal
 
 class NetClient:
     netPlayers = []
@@ -58,17 +59,16 @@ class NetClient:
 
     def set_pos(self, movement):
 
-        # Do not send empty data to the server
+        # Do not send empty data to the server (clicking on tile player is standing on)
         if str(movement) == "[]":
             return
 
-        print(f"Sending movement to server: {movement}")
         self.sendToServer(f"{NetMessageCodes.PlayerMovement}_{movement}")
 
     def processServerMessage(self, message):
         message = str(message)
         message = message.split('\'')[1]
-        print(f"Converted and trimmed: {message}")
+        #print(f"Converted and trimmed: {message}")
         messageContents = message.split('_')
 
         func = self.switcher.get(messageContents[0])
@@ -84,15 +84,12 @@ class NetClient:
 
         positionArray = []
         messagePositions = messageTrim.split(",")
-        print(messagePositions)
+        #print(messagePositions)
         for i in range(0, len(messagePositions), 2):
             positionArray.append([(int(messagePositions[i]), int(messagePositions[i + 1]))])
 
-        print(f"Add movement of player: {int(messageContents[2])}")
         for otherPlayer in self.netPlayers:
-            print(f"{otherPlayer.ID} == {int(messageContents[2])}")
             if otherPlayer.ID == int(messageContents[2]):
-                print(f"Update movement of player: {messageContents[2]}")
                 otherPlayer.NetPlayer.setMove(positionArray)
 
                 otherPlayer.NetPlayer.setCounter2()
@@ -119,6 +116,11 @@ class NetClient:
 
     def processPlayerRemove(self, messageContents):
         print(f"PlayerRemove {messageContents}")
+        playerToRemoveID = int(messageContents[1])
+
+        for player in self.netPlayers:
+            if player.ID == playerToRemoveID:
+                self.netPlayers.remove(player)
 
     switcher = {
         NetMessageCodes.PlayerMovement: processMovement,
@@ -147,6 +149,7 @@ class NetClient:
                 self.messagesToServer.clear()
             except socket.error as e:
                 print(e)
+                break
 
     def listenToServer(self, filler):
         print("Listen thread started")
@@ -157,10 +160,13 @@ class NetClient:
                 if str(data) == NetMessageCodes.MessageReceivedByte:
                     print("Received confirmation from server")
                     continue
-                print(f"{str(data)} --- {NetMessageCodes.MessageReceived}")
+
                 self.socket.send(str.encode(NetMessageCodes.MessageReceived))
 
                 self.processServerMessage(data)
 
             except Exception as e:
                 print(f"Connection error: {traceback.format_exc()}")
+                break
+
+        self.netPlayers.clear()

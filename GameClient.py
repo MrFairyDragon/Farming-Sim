@@ -99,7 +99,7 @@ class GameClient:
                 if not pygame.mouse.get_pressed()[0] and mousePressed:
                     mousePressed = False
                     self.grid.MouseClicked()
-                    print("I CLICKED OH MY GOD MAKE MYSELF CLEAR AND EASY TO SEEEEEEEEEE")
+
                 elif pygame.mouse.get_pressed()[0] and not self.shop.isBuying:
                     mousePressed = True
             # Main Event loop end

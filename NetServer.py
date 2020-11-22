@@ -80,7 +80,7 @@ class NetServer:
     def processClientMessage(self, message, client):
         message = str(message)
         message = message.split('\'')[1]
-        print(f"Converted and trimmed: {message}")
+        #print(f"Converted and trimmed: {message}")
         messageContents = message.split('_')
 
         func = self.switcher.get(messageContents[0])
@@ -96,11 +96,11 @@ class NetServer:
 
         positionArray = []
         messagePositions = messageTrim.split(",")
-        print(messagePositions)
+        #print(messagePositions)
         for i in range(0, len(messagePositions), 2):
             positionArray.append([(int(messagePositions[i]), int(messagePositions[i+1]))])
 
-        print(f"Restructured array: {positionArray}")
+        #print(f"Restructured array: {positionArray}")
         client.clientPlayer.setMove(positionArray)
 
         client.clientPlayer.setCounter2()
@@ -109,7 +109,7 @@ class NetServer:
 
         for otherClient in self.gameClients:
             if otherClient.ID != client.ID:
-                print(f"Tell other users about movement: {otherClient.ID}")
+                #print(f"Tell other users about movement: {otherClient.ID}")
                 sendMessage = f"{NetMessageCodes.PlayerMovement}_{messageTrim}_{client.ID}"
                 otherClient.connection.send(str.encode(sendMessage))
 
@@ -146,9 +146,10 @@ class NetServer:
 
         while True:
             try:
-                print("Waiting for data from client: {}".format(time.time()))
+                print(f"Waiting for data from client: {clientPlayer.ID}")
                 data = clientPlayer.connection.recv(2048)
                 if str(data) == NetMessageCodes.MessageReceivedByte:
+                    print(f"Received confirmation from client: {clientPlayer.ID}")
                     continue
 
                 clientPlayer.connection.send(str.encode(NetMessageCodes.MessageReceived))
@@ -162,5 +163,16 @@ class NetServer:
                 break
 
         self.gameClients.remove(clientPlayer)
+        self.ClientDisconnected(clientPlayer.ID)
         print(f"Lost connection to player {clientPlayer}: {time.time()}")
+
         connection.close
+
+    def ClientDisconnected(self, clientID):
+
+        #We removed the client so we don't need to check while looping
+        for client in self.gameClients:
+            try:
+                client.connection.send(str.encode(f"{NetMessageCodes.PlayerRemove}_{clientID}"))
+            except:
+                pass
