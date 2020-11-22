@@ -78,14 +78,7 @@ class NetServer:
     def make_pos(self, tup):
         return str(f'{tup[0]}, {tup[1]}')
 
-    def processClientMessage(self, message, client):
-        message = str(message)
-        message = message.split('\'')[1]
-        #print(f"Converted and trimmed: {message}")
-        messageContents = message.split('_')
 
-        func = self.switcher.get(messageContents[0])
-        func(self, messageContents[1], client)
 
     def processMovement(self, message, client):
 
@@ -119,6 +112,15 @@ class NetServer:
 
     def processPlaceSprinkler(self, message, client):
         print(f"PlayerPlaceSprinkler: {message}")
+
+    def processClientMessage(self, message, client):
+        message = str(message)
+        message = message.split('\'')[1]
+        #print(f"Converted and trimmed: {message}")
+        messageContents = message.split('_')
+
+        func = self.switcher.get(messageContents[0])
+        func(self, messageContents[1], client)
 
     switcher = {
         NetMessageCodes.PlayerMovement: processMovement,
