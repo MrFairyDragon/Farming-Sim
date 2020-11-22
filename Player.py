@@ -1,7 +1,6 @@
 import pygame
 import numpy as np
 from A_Star import A_Star
-from NetClient import NetClient
 
 
 class Player:

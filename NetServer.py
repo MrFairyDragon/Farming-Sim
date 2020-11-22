@@ -63,6 +63,7 @@ class NetServer:
         while True:
             connection, addr = mySocket.accept()
             print('Connected to :', addr[0], ':', addr[1], 'player:', self.clientIDcounter)
+            connection.send(str.encode("Connection verified"))
 
             start_new_thread(self.thread, (connection, self.clientIDcounter))
             self.clientIDcounter += 1
@@ -79,22 +80,23 @@ class NetServer:
     def processClientMessage(self, message, client):
         message = str(message)
         message = message.split('\'')[1]
-        #print(f"Converted and trimmed: {message}")
+        print(f"Converted and trimmed: {message}")
         messageContents = message.split('_')
 
         func = self.switcher.get(messageContents[0])
         func(self, messageContents[1], client)
 
-    def processCharacterPos(self, message, client):
+    def processMovement(self, message, client):
 
-        message = message.replace('[', '')
-        message = message.replace(']', '')
-        message = message.replace('(', '')
-        message = message.replace(')', '')
-        message = message.replace(' ', '')
+        messageTrim = message.replace('[', '')
+        messageTrim = messageTrim.replace(']', '')
+        messageTrim = messageTrim.replace('(', '')
+        messageTrim = messageTrim.replace(')', '')
+        messageTrim = messageTrim.replace(' ', '')
 
         positionArray = []
-        messagePositions = message.split(",")
+        messagePositions = messageTrim.split(",")
+        print(messagePositions)
         for i in range(0, len(messagePositions), 2):
             positionArray.append([(int(messagePositions[i]), int(messagePositions[i+1]))])
 
@@ -105,6 +107,12 @@ class NetServer:
         client.clientPlayer.setSwitch()
         client.clientPlayer.setMove2()
 
+        for otherClient in self.gameClients:
+            if otherClient.ID != client.ID:
+                print(f"Tell other users about movement: {otherClient.ID}")
+                sendMessage = f"{NetMessageCodes.PlayerMovement}_{messageTrim}_{client.ID}"
+                otherClient.connection.send(str.encode(sendMessage))
+
     def processBuyTile(self, message, client):
         print(f"PlayerBuyTile: {message}")
 
@@ -112,40 +120,42 @@ class NetServer:
         print(f"PlayerPlaceSprinkler: {message}")
 
     switcher = {
-        NetMessageCodes.PlayerMovement: processCharacterPos,
+        NetMessageCodes.PlayerMovement: processMovement,
         NetMessageCodes.PlayerBuyTile: processBuyTile,
-        NetMessageCodes.PlayerPlaceSprinkler: processPlaceSprinkler
+        NetMessageCodes.PlayerPlaceSprinkler: processPlaceSprinkler,
     }
 
     def thread(self, connection, ID):
 
         clientPlayer = self.Client(self.main)
-        self.gameClients.append(clientPlayer)
-
         clientPlayer.ID = ID
         clientPlayer.connection = connection
-        clientPlayer.connection.send(str.encode(self.make_pos(clientPlayer.mousePos)))
+
+        #If other players are already connected we want to tell the new user about them
+        if len(self.gameClients) > 0:
+            playerList = ""
+
+            for client in self.gameClients:
+                #Also tell the other users about the new guy
+                client.connection.send(str.encode(f"{NetMessageCodes.PlayerAdd}_{clientPlayer.ID}"))
+                playerList += f"{client.ID}-"
+
+            clientPlayer.connection.send(str.encode(f"{NetMessageCodes.PlayerAddMultiple}_{playerList}"))
+
+        self.gameClients.append(clientPlayer)
 
         while True:
             try:
                 print("Waiting for data from client: {}".format(time.time()))
                 data = clientPlayer.connection.recv(2048)
-                clientPlayer.connection.send(str.encode("Received"))
+                if str(data) == NetMessageCodes.MessageReceivedByte:
+                    continue
+
+                clientPlayer.connection.send(str.encode(NetMessageCodes.MessageReceived))
 
                 #print(f"Received data: {data}")
 
                 self.processClientMessage(data, clientPlayer)
-
-                #reply = "Thank you"
-                #print(f"Reply message: {reply}")
-
-                #if not data:
-                #    print(f'Goodbye player{clientPlayer}')
-                #else:
-                #    print("Received:", data)
-                #    print("Sending:", reply)
-
-
 
             except Exception as e:
                 print(f"Connection error: {traceback.format_exc()}")

@@ -1,3 +1,9 @@
+MessageReceived = "Received"
+MessageReceivedByte = "b'Received'"
+
 PlayerMovement = "PlayerCharacterPosition"
 PlayerBuyTile = "PlayerBuyTile"
-PlayerPlaceSprinkler = "PlacerPlaceSprinkler"
+PlayerPlaceSprinkler = "PlayerPlaceSprinkler"
+PlayerAdd = "PlayerAdd"
+PlayerAddMultiple = "PlayerAddMultiple"
+PlayerRemove = "PlayerRemove"

@@ -1,6 +1,5 @@
 import numpy as np
 import pygame
-from NetClient import NetClient
 from GameObject import GameObject
 
 

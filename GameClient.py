@@ -35,7 +35,8 @@ class GameClient:
         self.a_star = A_Star()
         self.a_grid = A_Star.make_grid(self.a_star, self.grid.sizeX, self.grid.sizeY)
         self.player = Player(self)
-        self.network = NetClient()
+        self.network = NetClient(self)
+
         # Defines Positions of self.farmland's and the self.size determined in tiles (posX, posY, self.sizeX,
 
         self.farmarray = [[1, 1, 3, 3],
@@ -98,6 +99,7 @@ class GameClient:
                 if not pygame.mouse.get_pressed()[0] and mousePressed:
                     mousePressed = False
                     self.grid.MouseClicked()
+                    print("I CLICKED OH MY GOD MAKE MYSELF CLEAR AND EASY TO SEEEEEEEEEE")
                 elif pygame.mouse.get_pressed()[0] and not self.shop.isBuying:
                     mousePressed = True
             # Main Event loop end
@@ -123,13 +125,15 @@ class GameClient:
             self.test.Walk()
             self.test2.Walk()
             self.player.DrawCharacter(self.screen,
-                                 self.player.getScaledUpCharacter(self.player.female, self.player.getScaleRatioFemale()),
-                                 self.player.setPos(500, 300),
-                                 self.player.getMove2(),
-                                 self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.west),
-                                 self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.north),
-                                 self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.east),
-                                 self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.south))
+                                self.player.getScaledUpCharacter(self.player.female, self.player.getScaleRatioFemale()),
+                                self.player.setPos(500, 300),
+                                self.player.getMove2(),
+                                self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.west),
+                                self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.north),
+                                self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.east),
+                                self.player.getCoordCropping(self.player.getScaleRatioFemale(), self.player.south))
+
+            self.network.drawPlayers(self.screen)
 
             self.grid.draw()
             self.shop.draw()
