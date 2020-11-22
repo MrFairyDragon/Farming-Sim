@@ -1,6 +1,6 @@
 import pygame
 import sys
-from main import main
+from GameServer import main
 
 
 def StartTheGame():

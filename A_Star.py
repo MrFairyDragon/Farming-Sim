@@ -5,7 +5,7 @@ import pygame
 from queue import PriorityQueue
 
 
-class Astar:
+class A_Star:
 
     def calcH(self, p1, p2):
         x1, y1 = p1

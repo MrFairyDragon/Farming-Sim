@@ -1,43 +1,62 @@
 import pygame
-from main import main
-from ServerSide import ServerSide
-from network import network
+from GameServer import GameServer
+from GameClient import GameClient
+from NetServer import NetServer
+from NetClient import NetClient
 import sys
 
 
-def StartTheGame():
-    main()
+def PlayTheGame():
+    print("PLAY TIME")
+    GameClient()
 
+def HostTheGame():
+    print("HOST TIME")
+    GameServer()
 
 class Main_menu:
 
     def __init__(self):
         pygame.init()
+
         self.size = (800, 600)
         self.__screen = pygame.display.set_mode(self.size)
+
         self.__isInMenu = True
         self.__isPaused = False
+
         self.Widget1 = pygame.image.load('Assets/Multiplayer_Buttons.png')
         self.Widget2 = pygame.image.load('Assets/Multiplayer_Buttons.png')
         self.background = pygame.image.load('Assets/Sky_Skrr.png')
         # self.background = pygame.transform.scale(self.background, self.size)
+
         self.font = pygame.font.Font('Fonts/COMIC.TTF', 20)
         self.blue = (0, 0, 128)
+
         self.text = self.font.render('Play', True, self.blue)
         self.text2 = self.font.render('Host', True, self.blue)
         self.text4 = self.font.render('Waiting for another Player', True, self.blue)
         self.text5 = self.font.render('Connecting please wait', True, self.blue)
+
         self.playCoordinates = (300, 200)
         self.hostCoordinates = (300, 280)
+
         self.girlAnimation = (360, 130)
         self.Widget1Length = 190
         self.Widget1Height = 50
+
         self.mx = None
         self.my = None
-        self.gameState = "menu"
+
+        self.menuState = "menu"
+        self.playState = "play"
+        self.hostState = "host"
+        self.gameState = self.menuState
+
         self.counter = 0
         self.indexCount = 0
         self.isTrue = True
+
         self.spriteSheet = pygame.image.load('Assets/Pepper_publish.png')
         self.scaleUp = pygame.transform.scale(self.spriteSheet, (540, 384))
         self.spriteList = [(3*3, 3*3, 18*3, 29*3),
@@ -65,12 +84,12 @@ class Main_menu:
             if self.mx <= self.playCoordinates[0] + self.Widget1Length:
                 if self.my >= self.playCoordinates[1]:
                     if self.my <= self.playCoordinates[1] + self.Widget1Height:
-                        self.gameState = "game"
+                        self.gameState = self.playState
         if self.mx >= self.hostCoordinates[0]:
             if self.mx <= self.hostCoordinates[0] + self.Widget1Length:
                 if self.my >= self.hostCoordinates[1]:
                     if self.my <= self.hostCoordinates[1] + self.Widget1Height:
-                        self.gameState = "host"
+                        self.gameState = self.hostState
 
     def RenderAnimation(self):
         self.__screen.blit(self.scaleUp, (375, 130), self.spriteList[self.indexCount])
@@ -78,17 +97,9 @@ class Main_menu:
         if self.indexCount == len(self.spriteList):
             self.indexCount = 0
 
-    def host(self):
-        self.__screen.blit(self.background, (0 + (1 * self.counter), 0))
-        self.__screen.blit(self.background, (-self.size[0] + (1 * self.counter), 0))
-        self.__screen.blit(self.text4, (377, 287))
-
-        ServerSide()
-
-
     def main_menu(self):
-        if self.gameState == "menu":
-            while self.gameState == "menu":
+        if self.gameState == self.menuState:
+            while self.gameState == self.menuState:
                 self.mx, self.my = pygame.mouse.get_pos()
                 t1 = pygame.time.get_ticks()
                 dt = t1 - self.t0
@@ -117,11 +128,9 @@ class Main_menu:
                         pygame.quit()
                         sys.exit()
         if self.gameState == "host":
-            self.host()
-        if self.gameState == "join":
-            self.join()
-        if self.gameState == "game":
-            StartTheGame()
+            HostTheGame()
+        if self.gameState == "play":
+            PlayTheGame()
 
     def SelectTheScreen(self):
         if self.__isInMenu:

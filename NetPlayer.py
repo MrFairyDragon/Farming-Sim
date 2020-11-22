@@ -2,9 +2,9 @@ import pygame
 import numpy as np
 from A_Star import A_Star
 from NetClient import NetClient
+import traceback
 
-
-class Player:
+class NetPlayer:
 
     def __init__(self, main):
         self.main = main
@@ -138,6 +138,9 @@ class Player:
             pos = path[i].get_pos()
             for j in range(1):
                 ans[i].append(pos)
+        print(ans)
+        ans = self.__move
+        print(self.__move)
         return ans
 
     def getMove(self):
@@ -216,10 +219,14 @@ class Player:
 
         t1 = pygame.time.get_ticks()
         dt = t1 - self.t0
+
         if self.__counter2 == 0:
             screen.blit(img, posTup, sprite_sheetCroppingS[1])
+
         if self.__counter2 >= 1:
+
             if self.__switch:
+
                 if self.DetermineDirection(self.getMove2())[self.__indexCount3] == "South":
                     screen.blit(img, getMovement[self.__indexCount2], sprite_sheetCroppingS[self.__indexCount])
                 if self.DetermineDirection(self.getMove2())[self.__indexCount3] == "North":
@@ -249,4 +256,3 @@ class Player:
             if self.__indexCount == len(sprite_sheetCroppingW):
                 self.__indexCount = 0
             self.t0 = t1
-
